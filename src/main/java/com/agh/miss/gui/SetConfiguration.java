@@ -13,8 +13,10 @@ public class SetConfiguration {
         return size;
     }
 
-    //Set color based on actualEnergy
+    //Set color based if person is infected
     public static Color setColorPerson (Person person, World world){
-        return Color.rgb(31, 18, 4);
+        if (!person.isInfected())
+            return Color.rgb(78,235,0);
+        return Color.rgb(255,0,0);
     }
 }

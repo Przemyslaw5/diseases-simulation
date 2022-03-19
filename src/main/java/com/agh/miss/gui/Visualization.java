@@ -14,17 +14,17 @@ import java.util.List;
 
 public class Visualization extends Application {
 
-    private static int AVAILABLE_WIDTH  = 1500;
-    private static int AVAILABLE_HEIGHT = 800;
+    private static final int AVAILABLE_WIDTH  = 1500;
+    private static final int AVAILABLE_HEIGHT = 800;
     private static final int WIDTH_STATISTICS = 650;
     private static final int HEIGHT_STATISTICS = 750;
     private static int GRID_SIZE;
     private static int WIDTH;
     private static int HEIGHT;
     private static final long TIME_STEP_ANIMATION_MAP = 100_000_000;
-    private static final int NUMBER_OF_MAPS = 2;
+    private static final int NUMBER_OF_MAPS = 1;
     private static final String TITLE = "Diseases simulation";
-    private List<Stage> stages = new LinkedList<>();
+    private final List<Stage> stages = new LinkedList<>();
 
     @Override
     public void start(Stage stage) throws Exception {
