@@ -1,0 +1,19 @@
+package com.agh.miss;
+
+import com.agh.miss.map.World;
+
+public class Simulation {
+
+    public World world;
+
+    public Simulation() {
+
+        world = new World(50, 50);
+        world.putStartPeople(300);
+    }
+
+    public void simulateDay() {
+        world.run();
+    }
+
+}
