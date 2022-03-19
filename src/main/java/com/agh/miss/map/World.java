@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public class World implements IWorldMap {
     public final int MAP_WIDTH;
     public final int MAP_HEIGHT;
+    public final double percentageOfInfection;
     private final Point leftBottomCorner;
     private final Point rightTopCorner;
 
@@ -16,27 +17,28 @@ public class World implements IWorldMap {
 
     private HashMap<Point, LinkedList<Person>> people = new HashMap<>();
 
-    public World(int width, int height){
+    public World(int width, int height, double percentageOfInfection) {
         this.MAP_WIDTH = width;
         this.MAP_HEIGHT = height;
-        this.leftBottomCorner = new Point(0,0);
+        this.percentageOfInfection = percentageOfInfection;
+        this.leftBottomCorner = new Point(0, 0);
         this.rightTopCorner = new Point(width, height);
     }
 
-    public static Point repairPositionOnMap(Point position, World world){
+    public static Point repairPositionOnMap(Point position, World world) {
         int newXPosition;
         int newYPosition;
         int width = world.rightTopCorner.x;
         int height = world.rightTopCorner.y;
 
         //Set x position
-        if(position.x < world.leftBottomCorner.x)
+        if (position.x < world.leftBottomCorner.x)
             newXPosition = (width - Math.abs(position.x % width)) % width;
         else
             newXPosition = Math.abs(position.x % width);
 
         //Set y position
-        if(position.y < world.leftBottomCorner.x)
+        if (position.y < world.leftBottomCorner.x)
             newYPosition = (height - Math.abs(position.x % height)) % height;
         else
             newYPosition = Math.abs(position.y % height);
@@ -51,8 +53,8 @@ public class World implements IWorldMap {
 
     @Override
     public boolean place(Person person) {
-        if(canMoveTo(person.getPosition())){
-            if(!people.containsKey(person.getPosition())){
+        if (canMoveTo(person.getPosition())) {
+            if (!people.containsKey(person.getPosition())) {
                 people.put(person.getPosition(), new LinkedList<>());
             }
             people.get(person.getPosition()).add(person);
@@ -72,59 +74,85 @@ public class World implements IWorldMap {
 
     @Override
     public boolean isOccupied(Point position) {
-        if(people.get(position) != null) return true;
+        if (people.get(position) != null) return true;
         return false;
     }
 
     @Override
     public Object objectAt(Point position) {
-        if(people.get(position) != null)
+        if (people.get(position) != null)
             return people.get(position).get(0);
         return null;
     }
 
 
-    public int numberAllPeopleOnMap(){
+    public int numberAllPeopleOnMap() {
         List<Person> allPeople = people.values().stream()
                 .flatMap(Collection::stream).collect(Collectors.toList());
         return allPeople.size();
     }
 
-    private Point getChildField(Point adult){
+    private Point getChildField(Point adult) {
         LinkedList<Point> ListOfFreeFields = new LinkedList<>();
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x, adult.y + 1), this))) ListOfFreeFields.add(new Point(adult.x, adult.y + 1));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y + 1), this))) ListOfFreeFields.add(new Point(adult.x + 1, adult.y + 1));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y), this))) ListOfFreeFields.add(new Point(adult.x + 1, adult.y));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y - 1), this))) ListOfFreeFields.add(new Point(adult.x + 1, adult.y - 1));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x, adult.y - 1), this))) ListOfFreeFields.add(new Point(adult.x, adult.y - 1));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y - 1), this))) ListOfFreeFields.add(new Point(adult.x - 1, adult.y - 1));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y), this))) ListOfFreeFields.add(new Point(adult.x - 1, adult.y));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y + 1), this))) ListOfFreeFields.add(new Point(adult.x - 1, adult.y + 1));
-        if(ListOfFreeFields.size() == 0) {
-            ListOfFreeFields.add(new Point(adult.x, adult.y + 1)); ListOfFreeFields.add(new Point(adult.x + 1, adult.y + 1)); ListOfFreeFields.add(new Point(adult.x + 1, adult.y)); ListOfFreeFields.add(new Point(adult.x + 1, adult.y - 1));
-            ListOfFreeFields.add(new Point(adult.x, adult.y - 1)); ListOfFreeFields.add(new Point(adult.x - 1, adult.y - 1)); ListOfFreeFields.add(new Point(adult.x - 1, adult.y)); ListOfFreeFields.add(new Point(adult.x - 1, adult.y + 1));
+        if (!isOccupied(repairPositionOnMap(new Point(adult.x, adult.y + 1), this)))
+            ListOfFreeFields.add(new Point(adult.x, adult.y + 1));
+        if (!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y + 1), this)))
+            ListOfFreeFields.add(new Point(adult.x + 1, adult.y + 1));
+        if (!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y), this)))
+            ListOfFreeFields.add(new Point(adult.x + 1, adult.y));
+        if (!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y - 1), this)))
+            ListOfFreeFields.add(new Point(adult.x + 1, adult.y - 1));
+        if (!isOccupied(repairPositionOnMap(new Point(adult.x, adult.y - 1), this)))
+            ListOfFreeFields.add(new Point(adult.x, adult.y - 1));
+        if (!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y - 1), this)))
+            ListOfFreeFields.add(new Point(adult.x - 1, adult.y - 1));
+        if (!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y), this)))
+            ListOfFreeFields.add(new Point(adult.x - 1, adult.y));
+        if (!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y + 1), this)))
+            ListOfFreeFields.add(new Point(adult.x - 1, adult.y + 1));
+        if (ListOfFreeFields.size() == 0) {
+            ListOfFreeFields.add(new Point(adult.x, adult.y + 1));
+            ListOfFreeFields.add(new Point(adult.x + 1, adult.y + 1));
+            ListOfFreeFields.add(new Point(adult.x + 1, adult.y));
+            ListOfFreeFields.add(new Point(adult.x + 1, adult.y - 1));
+            ListOfFreeFields.add(new Point(adult.x, adult.y - 1));
+            ListOfFreeFields.add(new Point(adult.x - 1, adult.y - 1));
+            ListOfFreeFields.add(new Point(adult.x - 1, adult.y));
+            ListOfFreeFields.add(new Point(adult.x - 1, adult.y + 1));
         }
         int randomIndex = random.nextInt(ListOfFreeFields.size());
         return ListOfFreeFields.get(randomIndex);
     }
 
-    public void putStartPeople(int number){
+    public void infectPeoples(){
+        people.forEach((position, listOfPeople) -> {
+            if(listOfPeople.size() == 2 && listOfPeople.get(0).isInfected() != listOfPeople.get(1).isInfected()){
+                listOfPeople.sort(Comparator.comparing(Person::isInfected).reversed());
+
+                if (random.nextDouble() * 100 <= percentageOfInfection) {
+                    listOfPeople.get(1).infect();
+                }
+            }
+        });
+    }
+
+    public void putStartPeople(int peopleNumber, double percentageOfInfectedPeople) {
         Person person;
-        for(int i = 0; i < number; i++){
+        for (int i = 0; i < peopleNumber; i++) {
             int x, y;
-            do{
+            do {
                 x = random.nextInt(rightTopCorner.x);
                 y = random.nextInt(rightTopCorner.y);
             } while (isOccupied(new Point(x, y)));
-            person = new Person(new Point(x, y), this);
+            person = new Person(new Point(x, y), this, random.nextDouble() * 100 <= percentageOfInfectedPeople);
             place(person);
         }
     }
 
-    public void positionChanged(Point oldPosition, Person person){
+    public void positionChanged(Point oldPosition, Person person) {
         people.get(oldPosition).remove(person);
 
-        if(people.get(oldPosition).isEmpty()) people.remove(oldPosition);
+        if (people.get(oldPosition).isEmpty()) people.remove(oldPosition);
         this.place(person);
     }
 
