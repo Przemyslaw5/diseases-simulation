@@ -15,7 +15,7 @@ public class World implements IWorldMap {
 
     private static final Random random = new Random();
 
-    private HashMap<Point, LinkedList<Person>> people = new HashMap<>();
+    private final HashMap<Point, LinkedList<Person>> people = new HashMap<>();
 
     public World(int width, int height, double percentageOfInfection) {
         this.MAP_WIDTH = width;
@@ -85,58 +85,19 @@ public class World implements IWorldMap {
         return null;
     }
 
-
-    public int numberAllPeopleOnMap() {
-        List<Person> allPeople = people.values().stream()
-                .flatMap(Collection::stream).collect(Collectors.toList());
-        return allPeople.size();
-    }
-
-    private Point getChildField(Point adult) {
-        LinkedList<Point> ListOfFreeFields = new LinkedList<>();
-        if (!isOccupied(repairPositionOnMap(new Point(adult.x, adult.y + 1), this)))
-            ListOfFreeFields.add(new Point(adult.x, adult.y + 1));
-        if (!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y + 1), this)))
-            ListOfFreeFields.add(new Point(adult.x + 1, adult.y + 1));
-        if (!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y), this)))
-            ListOfFreeFields.add(new Point(adult.x + 1, adult.y));
-        if (!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y - 1), this)))
-            ListOfFreeFields.add(new Point(adult.x + 1, adult.y - 1));
-        if (!isOccupied(repairPositionOnMap(new Point(adult.x, adult.y - 1), this)))
-            ListOfFreeFields.add(new Point(adult.x, adult.y - 1));
-        if (!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y - 1), this)))
-            ListOfFreeFields.add(new Point(adult.x - 1, adult.y - 1));
-        if (!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y), this)))
-            ListOfFreeFields.add(new Point(adult.x - 1, adult.y));
-        if (!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y + 1), this)))
-            ListOfFreeFields.add(new Point(adult.x - 1, adult.y + 1));
-        if (ListOfFreeFields.size() == 0) {
-            ListOfFreeFields.add(new Point(adult.x, adult.y + 1));
-            ListOfFreeFields.add(new Point(adult.x + 1, adult.y + 1));
-            ListOfFreeFields.add(new Point(adult.x + 1, adult.y));
-            ListOfFreeFields.add(new Point(adult.x + 1, adult.y - 1));
-            ListOfFreeFields.add(new Point(adult.x, adult.y - 1));
-            ListOfFreeFields.add(new Point(adult.x - 1, adult.y - 1));
-            ListOfFreeFields.add(new Point(adult.x - 1, adult.y));
-            ListOfFreeFields.add(new Point(adult.x - 1, adult.y + 1));
-        }
-        int randomIndex = random.nextInt(ListOfFreeFields.size());
-        return ListOfFreeFields.get(randomIndex);
-    }
-
-    public void infectPeoples(){
+    public void infectPeople(){
         people.forEach((position, listOfPeople) -> {
             if(listOfPeople.size() == 2 && listOfPeople.get(0).isInfected() != listOfPeople.get(1).isInfected()){
                 listOfPeople.sort(Comparator.comparing(Person::isInfected).reversed());
 
-                if (random.nextDouble() * 100 <= percentageOfInfection) {
+                if (listOfPeople.get(0).canInfect() && random.nextDouble() * 100 <= percentageOfInfection) {
                     listOfPeople.get(1).infect();
                 }
             }
         });
     }
 
-    public void putStartPeople(int peopleNumber, double percentageOfInfectedPeople) {
+    public void putStartPeople(int peopleNumber, double percentageChanceOfInfectedPeople) {
         Person person;
         for (int i = 0; i < peopleNumber; i++) {
             int x, y;
@@ -144,7 +105,7 @@ public class World implements IWorldMap {
                 x = random.nextInt(rightTopCorner.x);
                 y = random.nextInt(rightTopCorner.y);
             } while (isOccupied(new Point(x, y)));
-            person = new Person(new Point(x, y), this, random.nextDouble() * 100 <= percentageOfInfectedPeople);
+            person = new Person(new Point(x, y), this, random.nextDouble() * 100 <= percentageChanceOfInfectedPeople);
             place(person);
         }
     }

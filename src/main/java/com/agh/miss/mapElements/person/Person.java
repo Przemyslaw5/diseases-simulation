@@ -11,10 +11,10 @@ import java.util.Random;
 public class Person extends AbstractMapElement {
 
     private MapDirection direction;
-    private World world;
-    private boolean isInfected = false;
+    private final World world;
+    private boolean isInfected;
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     public Person(Point startPosition, World world, boolean isInfected) {
         super(startPosition);
@@ -23,7 +23,7 @@ public class Person extends AbstractMapElement {
         this.isInfected = isInfected;
     }
 
-    public boolean canPersonInfect(){
+    public boolean canInfect(){
         return isInfected;
     }
 

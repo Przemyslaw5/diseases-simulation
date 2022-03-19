@@ -14,7 +14,7 @@ public class Simulation {
 
     public void simulateDay() {
         world.run();
-        world.infectPeoples();
+        world.infectPeople();
     }
 
 }
