@@ -95,7 +95,7 @@ public class World implements IWorldMap {
     public int numberHealthyPeopleOnMap(){
         return people.values().stream()
                 .flatMap(Collection::stream)
-                .filter(Person::isInfected)
+                .filter(Predicate.not(Person::isInfected))
                 .collect(Collectors.toList())
                 .size();
     }
@@ -103,7 +103,7 @@ public class World implements IWorldMap {
     public int numberInfectedPeopleOnMap() {
         return people.values().stream()
                 .flatMap(Collection::stream)
-                .filter(Predicate.not(Person::isInfected))
+                .filter(Person::isInfected)
                 .collect(Collectors.toList())
                 .size();
     }
