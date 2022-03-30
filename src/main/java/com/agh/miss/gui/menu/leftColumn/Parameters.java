@@ -66,7 +66,6 @@ public class Parameters extends VBox {
 
         //Setting an action for the Clear button
         clearButton.setOnAction(e -> {
-            System.out.println("Wczytaj defaultowe wartosci");
             peopleTextField.setText(String.valueOf(Simulation.PEOPLE_NUMBER));
             percentageInfectedPeopleTextField.setText(String.valueOf(Simulation.PERCENTAGE_OF_INFECTION));
             percentageChanceOfInfectTextField.setText(String.valueOf(Simulation.PERCENTAGE_CHANCE_OF_INFECTED_PEOPLE));
