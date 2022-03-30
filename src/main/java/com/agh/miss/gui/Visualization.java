@@ -81,13 +81,13 @@ public class Visualization extends Application {
     }
 
     public void startWithGivenParams(int peopleNumber,
-                                      double percentageOfInfection,
-                                      double percentageOfInfectedPeople
+                                      double percentageOfInfectedPeople,
+                                      double infectionChance
     ) {
         this.simulation = Simulation.startWithGivenParams(
                 peopleNumber,
-                percentageOfInfection,
-                percentageOfInfectedPeople
+                percentageOfInfectedPeople,
+                infectionChance
         );
         menu.getParameters().resetPausePlayButton();
     }
