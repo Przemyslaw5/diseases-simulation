@@ -5,7 +5,10 @@ import com.agh.miss.mapElements.person.Person;
 import javafx.scene.paint.Color;
 
 
-public class SetConfiguration {
+public class Configuration {
+
+    public final static Color HEALTHY_PERSON_COLOR = Color.rgb(78,235,0);
+    public final static Color INFECTED_PERSON_COLOR = Color.rgb(255,0,0);
 
     public static int setGridSize(int availableWidth, int availableHeight, int mapWidth, int mapHeight){
         int size = availableWidth / (mapWidth + 2);
@@ -15,6 +18,8 @@ public class SetConfiguration {
 
     //Set color based on actualEnergy
     public static Color setColorPerson (Person person, World world){
-        return Color.rgb(31, 18, 4);
+        if (!person.isInfected())
+            return HEALTHY_PERSON_COLOR;
+        return INFECTED_PERSON_COLOR;
     }
 }

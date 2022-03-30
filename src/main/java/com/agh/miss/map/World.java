@@ -4,6 +4,7 @@ import com.agh.miss.mapElements.person.Person;
 import com.agh.miss.parametersObject.Point;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class World implements IWorldMap {
@@ -67,13 +68,12 @@ public class World implements IWorldMap {
                 .flatMap(Collection::stream).collect(Collectors.toList());
 
         allPeople.forEach(Person::changeDirection);           //Every person must turn
-        allPeople.forEach(person -> person.move());           //Every person must move
+        allPeople.forEach(Person::move);           //Every person must move
     }
 
     @Override
     public boolean isOccupied(Point position) {
-        if(people.get(position) != null) return true;
-        return false;
+        return people.get(position) != null;
     }
 
     @Override
@@ -83,40 +83,38 @@ public class World implements IWorldMap {
         return null;
     }
 
-
-    public int numberAllPeopleOnMap(){
-        List<Person> allPeople = people.values().stream()
-                .flatMap(Collection::stream).collect(Collectors.toList());
-        return allPeople.size();
+    public int numberPeopleOnMap(){
+        return people.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList())
+                .size();
     }
 
-    private Point getChildField(Point adult){
-        LinkedList<Point> ListOfFreeFields = new LinkedList<>();
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x, adult.y + 1), this))) ListOfFreeFields.add(new Point(adult.x, adult.y + 1));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y + 1), this))) ListOfFreeFields.add(new Point(adult.x + 1, adult.y + 1));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y), this))) ListOfFreeFields.add(new Point(adult.x + 1, adult.y));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x + 1, adult.y - 1), this))) ListOfFreeFields.add(new Point(adult.x + 1, adult.y - 1));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x, adult.y - 1), this))) ListOfFreeFields.add(new Point(adult.x, adult.y - 1));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y - 1), this))) ListOfFreeFields.add(new Point(adult.x - 1, adult.y - 1));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y), this))) ListOfFreeFields.add(new Point(adult.x - 1, adult.y));
-        if(!isOccupied(repairPositionOnMap(new Point(adult.x - 1, adult.y + 1), this))) ListOfFreeFields.add(new Point(adult.x - 1, adult.y + 1));
-        if(ListOfFreeFields.size() == 0) {
-            ListOfFreeFields.add(new Point(adult.x, adult.y + 1)); ListOfFreeFields.add(new Point(adult.x + 1, adult.y + 1)); ListOfFreeFields.add(new Point(adult.x + 1, adult.y)); ListOfFreeFields.add(new Point(adult.x + 1, adult.y - 1));
-            ListOfFreeFields.add(new Point(adult.x, adult.y - 1)); ListOfFreeFields.add(new Point(adult.x - 1, adult.y - 1)); ListOfFreeFields.add(new Point(adult.x - 1, adult.y)); ListOfFreeFields.add(new Point(adult.x - 1, adult.y + 1));
-        }
-        int randomIndex = random.nextInt(ListOfFreeFields.size());
-        return ListOfFreeFields.get(randomIndex);
+    public int numberHealthyPeopleOnMap(){
+        return people.values().stream()
+                .flatMap(Collection::stream)
+                .filter(Person::isInfected)
+                .collect(Collectors.toList())
+                .size();
     }
 
-    public void putStartPeople(int number){
+    public int numberInfectedPeopleOnMap(){
+        return people.values().stream()
+                .flatMap(Collection::stream)
+                .filter(Predicate.not(Person::isInfected))
+                .collect(Collectors.toList())
+                .size();
+    }
+
+    public void putStartPeople(int peopleNumber, double percentageChanceOfInfectedPeople) {
         Person person;
-        for(int i = 0; i < number; i++){
+        for (int i = 0; i < peopleNumber; i++) {
             int x, y;
-            do{
+            do {
                 x = random.nextInt(rightTopCorner.x);
                 y = random.nextInt(rightTopCorner.y);
             } while (isOccupied(new Point(x, y)));
-            person = new Person(new Point(x, y), this);
+            person = new Person(new Point(x, y), this, random.nextDouble() * 100 <= percentageChanceOfInfectedPeople);
             place(person);
         }
     }
