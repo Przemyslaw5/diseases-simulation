@@ -4,12 +4,13 @@ import com.agh.miss.mapElements.person.Person;
 import com.agh.miss.parametersObject.Point;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class World implements IWorldMap {
     public final int MAP_WIDTH;
     public final int MAP_HEIGHT;
-    public final double percentageOfInfection;
+    public final double infectionChance;
     private final Point leftBottomCorner;
     private final Point rightTopCorner;
 
@@ -17,10 +18,10 @@ public class World implements IWorldMap {
 
     private final HashMap<Point, LinkedList<Person>> people = new HashMap<>();
 
-    public World(int width, int height, double percentageOfInfection) {
+    public World(int width, int height, double infectionChance) {
         this.MAP_WIDTH = width;
         this.MAP_HEIGHT = height;
-        this.percentageOfInfection = percentageOfInfection;
+        this.infectionChance = infectionChance;
         this.leftBottomCorner = new Point(0, 0);
         this.rightTopCorner = new Point(width, height);
     }
@@ -69,13 +70,12 @@ public class World implements IWorldMap {
                 .flatMap(Collection::stream).collect(Collectors.toList());
 
         allPeople.forEach(Person::changeDirection);           //Every person must turn
-        allPeople.forEach(person -> person.move());           //Every person must move
+        allPeople.forEach(Person::move);           //Every person must move
     }
 
     @Override
     public boolean isOccupied(Point position) {
-        if (people.get(position) != null) return true;
-        return false;
+        return people.get(position) != null;
     }
 
     @Override
@@ -85,19 +85,42 @@ public class World implements IWorldMap {
         return null;
     }
 
+    public int numberPeopleOnMap(){
+        return people.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList())
+                .size();
+    }
+
+    public int numberHealthyPeopleOnMap(){
+        return people.values().stream()
+                .flatMap(Collection::stream)
+                .filter(Predicate.not(Person::isInfected))
+                .collect(Collectors.toList())
+                .size();
+    }
+
+    public int numberInfectedPeopleOnMap() {
+        return people.values().stream()
+                .flatMap(Collection::stream)
+                .filter(Person::isInfected)
+                .collect(Collectors.toList())
+                .size();
+    }
+
     public void infectPeople(){
         people.forEach((position, listOfPeople) -> {
             if(listOfPeople.size() == 2 && listOfPeople.get(0).isInfected() != listOfPeople.get(1).isInfected()){
                 listOfPeople.sort(Comparator.comparing(Person::isInfected).reversed());
 
-                if (listOfPeople.get(0).canInfect() && random.nextDouble() * 100 <= percentageOfInfection) {
+                if (listOfPeople.get(0).canInfect() && random.nextDouble() * 100 <= infectionChance) {
                     listOfPeople.get(1).infect();
                 }
             }
         });
     }
 
-    public void putStartPeople(int peopleNumber, double percentageChanceOfInfectedPeople) {
+    public void putStartPeople(int peopleNumber, double percentageOfInfectedPeople) {
         Person person;
         for (int i = 0; i < peopleNumber; i++) {
             int x, y;
@@ -105,7 +128,7 @@ public class World implements IWorldMap {
                 x = random.nextInt(rightTopCorner.x);
                 y = random.nextInt(rightTopCorner.y);
             } while (isOccupied(new Point(x, y)));
-            person = new Person(new Point(x, y), this, random.nextDouble() * 100 <= percentageChanceOfInfectedPeople);
+            person = new Person(new Point(x, y), this, random.nextDouble() * 100 <= percentageOfInfectedPeople);
             place(person);
         }
     }

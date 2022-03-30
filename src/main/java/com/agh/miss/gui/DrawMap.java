@@ -36,7 +36,7 @@ public class DrawMap {
 
                             //Set Shape, position and color
                             shape = new Circle(1.5 * gridSize + gridSize * i, 1.5 * gridSize + gridSize * j, gridSize * 0.5);
-                            shape.setFill(SetConfiguration.setColorPerson((Person) simulation.world.objectAt(objectPoint), simulation.world));
+                            shape.setFill(Configuration.setColorPerson((Person) simulation.world.objectAt(objectPoint), simulation.world));
 
                             pane.getChildren().add(shape);
                     }

@@ -1,6 +1,7 @@
 package com.agh.miss.gui;
 
 import com.agh.miss.Simulation;
+import com.agh.miss.gui.menu.Menu;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -22,42 +23,29 @@ public class Visualization extends Application {
     private static int WIDTH;
     private static int HEIGHT;
     private static final long TIME_STEP_ANIMATION_MAP = 100_000_000;
-    private static final int NUMBER_OF_MAPS = 1;
     private static final String TITLE = "Diseases simulation";
     private final List<Stage> stages = new LinkedList<>();
+    public Simulation simulation;
+    private Menu menu;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
 
         stages.add(stage);
-        stage.setTitle(TITLE + " map 1");
-        Simulation simulation = new Simulation();
+        stage.setTitle(TITLE);
+        simulation = Simulation.startWithDefaultParams();
         DrawMap drawMap = new DrawMap();
 
         //Set size of one element on map, width and height of window
-        GRID_SIZE = SetConfiguration.setGridSize(AVAILABLE_WIDTH - WIDTH_STATISTICS, AVAILABLE_HEIGHT, simulation.world.MAP_WIDTH, simulation.world.MAP_HEIGHT);
+        GRID_SIZE = Configuration.setGridSize(AVAILABLE_WIDTH - WIDTH_STATISTICS, AVAILABLE_HEIGHT, simulation.world.MAP_WIDTH, simulation.world.MAP_HEIGHT);
         WIDTH = GRID_SIZE * (simulation.world.MAP_WIDTH + 2) + WIDTH_STATISTICS;
         HEIGHT = Math.max(HEIGHT_STATISTICS, GRID_SIZE * (simulation.world.MAP_HEIGHT + 2));
 
-        //Add another simulations
-        createMap(NUMBER_OF_MAPS - 1);
-
-        //Start first simulation
-        evolutionAnimation(simulation, stage, drawMap);
+        //Start simulation
+        evolutionAnimation(stage, drawMap);
     }
 
-    private void createMap(int numberOfMaps){
-        for(int i = 1; i <= numberOfMaps; i++){
-            Stage stage = new Stage();
-            stages.add(stage);
-            DrawMap drawMap = new DrawMap();
-            stage.setTitle(TITLE + " map " + (i + 1));
-            Simulation simulation = new Simulation();
-            evolutionAnimation(simulation, stage, drawMap);
-        }
-    }
-
-    public void evolutionAnimation(Simulation simulation, Stage stage, DrawMap drawMap) {
+    public void evolutionAnimation(Stage stage, DrawMap drawMap) {
 
         HBox hBox = new HBox();
 
@@ -67,15 +55,18 @@ public class Visualization extends Application {
         //Creating a platform for object on the map
         Pane mapElementsPane = new Pane();
 
-        hBox.getChildren().addAll(mapElementsPane);
+        //Creating a menu of the application
+        menu = new Menu(simulation, this);
+
+        hBox.getChildren().addAll(mapElementsPane, menu);
 
         AnimationTimer animationTimer = new AnimationTimer() {
             private long lastUpdate = 0 ;
             @Override
             public void handle(long now) {
-                if (now - lastUpdate >= TIME_STEP_ANIMATION_MAP) {
-                    lastUpdate = now ;
-                    simulationStep(simulation, mapElementsPane, drawMap);
+                if (menu.isApplicationRun() && (now - lastUpdate >= TIME_STEP_ANIMATION_MAP)) {
+                    lastUpdate = now;
+                    simulationStep(simulation, mapElementsPane, menu, drawMap);
                 }
             }
         };
@@ -89,10 +80,23 @@ public class Visualization extends Application {
         });
     }
 
-    private void simulationStep(Simulation simulation, Pane mapElementsPane, DrawMap drawMap) {
+    public void startWithGivenParams(int peopleNumber,
+                                      double percentageOfInfectedPeople,
+                                      double infectionChance
+    ) {
+        this.simulation = Simulation.startWithGivenParams(
+                peopleNumber,
+                percentageOfInfectedPeople,
+                infectionChance
+        );
+        menu.getParameters().resetPausePlayButton();
+    }
+
+    private void simulationStep(Simulation simulation, Pane mapElementsPane, Menu menu, DrawMap drawMap) {
         mapElementsPane.getChildren().clear();
         simulation.simulateDay();
         drawMap.draw(simulation, mapElementsPane, GRID_SIZE);
+        menu.onUpdate();
     }
 
     public static void main(String[] args) {
