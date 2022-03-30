@@ -4,7 +4,6 @@ import com.agh.miss.map.World;
 import com.agh.miss.mapElements.person.Person;
 import javafx.scene.paint.Color;
 
-
 public class Configuration {
 
     public final static Color HEALTHY_PERSON_COLOR = Color.rgb(78,235,0);
@@ -16,7 +15,7 @@ public class Configuration {
         return size;
     }
 
-    //Set color based on actualEnergy
+    //Set color based if person is infected
     public static Color setColorPerson (Person person, World world){
         if (!person.isInfected())
             return HEALTHY_PERSON_COLOR;

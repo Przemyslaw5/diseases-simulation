@@ -44,13 +44,14 @@ public class Simulation {
             double percentageOfInfection,
             double percentageOfInfectedPeople
     ) {
-        world = new World(width, height);
+        world = new World(width, height, percentageOfInfection);
         world.putStartPeople(peopleNumber, percentageOfInfectedPeople);
     }
 
     public void simulateDay() {
         dayOfSimulation++;
         world.run();
+        world.infectPeople();
     }
 
 }

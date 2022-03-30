@@ -10,34 +10,36 @@ import java.util.stream.Collectors;
 public class World implements IWorldMap {
     public final int MAP_WIDTH;
     public final int MAP_HEIGHT;
+    public final double percentageOfInfection;
     private final Point leftBottomCorner;
     private final Point rightTopCorner;
 
     private static final Random random = new Random();
 
-    private HashMap<Point, LinkedList<Person>> people = new HashMap<>();
+    private final HashMap<Point, LinkedList<Person>> people = new HashMap<>();
 
-    public World(int width, int height){
+    public World(int width, int height, double percentageOfInfection) {
         this.MAP_WIDTH = width;
         this.MAP_HEIGHT = height;
-        this.leftBottomCorner = new Point(0,0);
+        this.percentageOfInfection = percentageOfInfection;
+        this.leftBottomCorner = new Point(0, 0);
         this.rightTopCorner = new Point(width, height);
     }
 
-    public static Point repairPositionOnMap(Point position, World world){
+    public static Point repairPositionOnMap(Point position, World world) {
         int newXPosition;
         int newYPosition;
         int width = world.rightTopCorner.x;
         int height = world.rightTopCorner.y;
 
         //Set x position
-        if(position.x < world.leftBottomCorner.x)
+        if (position.x < world.leftBottomCorner.x)
             newXPosition = (width - Math.abs(position.x % width)) % width;
         else
             newXPosition = Math.abs(position.x % width);
 
         //Set y position
-        if(position.y < world.leftBottomCorner.x)
+        if (position.y < world.leftBottomCorner.x)
             newYPosition = (height - Math.abs(position.x % height)) % height;
         else
             newYPosition = Math.abs(position.y % height);
@@ -52,8 +54,8 @@ public class World implements IWorldMap {
 
     @Override
     public boolean place(Person person) {
-        if(canMoveTo(person.getPosition())){
-            if(!people.containsKey(person.getPosition())){
+        if (canMoveTo(person.getPosition())) {
+            if (!people.containsKey(person.getPosition())) {
                 people.put(person.getPosition(), new LinkedList<>());
             }
             people.get(person.getPosition()).add(person);
@@ -78,7 +80,7 @@ public class World implements IWorldMap {
 
     @Override
     public Object objectAt(Point position) {
-        if(people.get(position) != null)
+        if (people.get(position) != null)
             return people.get(position).get(0);
         return null;
     }
@@ -98,12 +100,24 @@ public class World implements IWorldMap {
                 .size();
     }
 
-    public int numberInfectedPeopleOnMap(){
+    public int numberInfectedPeopleOnMap() {
         return people.values().stream()
                 .flatMap(Collection::stream)
                 .filter(Predicate.not(Person::isInfected))
                 .collect(Collectors.toList())
                 .size();
+    }
+
+    public void infectPeople(){
+        people.forEach((position, listOfPeople) -> {
+            if(listOfPeople.size() == 2 && listOfPeople.get(0).isInfected() != listOfPeople.get(1).isInfected()){
+                listOfPeople.sort(Comparator.comparing(Person::isInfected).reversed());
+
+                if (listOfPeople.get(0).canInfect() && random.nextDouble() * 100 <= percentageOfInfection) {
+                    listOfPeople.get(1).infect();
+                }
+            }
+        });
     }
 
     public void putStartPeople(int peopleNumber, double percentageChanceOfInfectedPeople) {
@@ -119,10 +133,10 @@ public class World implements IWorldMap {
         }
     }
 
-    public void positionChanged(Point oldPosition, Person person){
+    public void positionChanged(Point oldPosition, Person person) {
         people.get(oldPosition).remove(person);
 
-        if(people.get(oldPosition).isEmpty()) people.remove(oldPosition);
+        if (people.get(oldPosition).isEmpty()) people.remove(oldPosition);
         this.place(person);
     }
 
