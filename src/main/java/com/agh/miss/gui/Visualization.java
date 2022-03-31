@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.LinkedList;
@@ -81,13 +82,17 @@ public class Visualization extends Application {
     }
 
     public void startWithGivenParams(int peopleNumber,
-                                      double percentageOfInfectedPeople,
-                                      double infectionChance
+                                     double percentageOfInfectedPeople,
+                                     double infectionChance,
+                                     double recoveryChance,
+                                     int recoveryTime
     ) {
         this.simulation = Simulation.startWithGivenParams(
                 peopleNumber,
                 percentageOfInfectedPeople,
-                infectionChance
+                infectionChance,
+                recoveryChance,
+                recoveryTime
         );
         menu.getParameters().resetPausePlayButton();
     }

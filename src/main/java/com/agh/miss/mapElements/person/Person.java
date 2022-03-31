@@ -13,6 +13,8 @@ public class Person extends AbstractMapElement {
     private MapDirection direction;
     private final World world;
     private boolean isInfected;
+    private boolean isCured;
+    private int infectionTime;
 
     private static final Random random = new Random();
 
@@ -21,14 +23,8 @@ public class Person extends AbstractMapElement {
         direction = MapDirection.getRandomDirection();
         this.world = world;
         this.isInfected = isInfected;
-    }
-
-    public boolean canInfect(){
-        return isInfected;
-    }
-
-    public boolean infect(){
-        return this.isInfected = true;
+        this.isCured = false;
+        this.infectionTime = 0;
     }
 
     public void changeDirection(){
@@ -52,6 +48,32 @@ public class Person extends AbstractMapElement {
 
     public boolean isInfected() {
         return isInfected;
+    }
+
+    public boolean isCured() {
+        return isCured;
+    }
+
+    public int infectionTime() {
+        return infectionTime;
+    }
+
+    public void infect(){
+        this.isInfected = true;
+    }
+
+    public boolean canInfect(){
+        return isInfected;
+    }
+
+    public void incInfectionTime() {
+        infectionTime++;
+    }
+
+    public void cure() {
+        isInfected = false;
+        isCured = true;
+        infectionTime = 0;
     }
 
     @Override
