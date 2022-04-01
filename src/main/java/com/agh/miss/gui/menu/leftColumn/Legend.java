@@ -28,7 +28,12 @@ public class Legend extends VBox {
         circle2.setFill(Configuration.INFECTED_PERSON_COLOR);
         HBox secondElement = new HBox(circle2, infectedPerson);
 
-        getChildren().addAll(labelLegend, firstElement, secondElement);
+        Label curedPerson  = new Label("    - Cured person");
+        Circle circle3 = new Circle(10);
+        circle3.setFill(Configuration.CURED_PERSON_COLOR);
+        HBox thirdElement = new HBox(circle3, curedPerson);
+
+        getChildren().addAll(labelLegend, firstElement, secondElement, thirdElement);
 
         // up right down left
         setPadding(new Insets(10, 0, 30, 10));

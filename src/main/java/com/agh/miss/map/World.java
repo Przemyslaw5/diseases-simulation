@@ -11,6 +11,8 @@ public class World implements IWorldMap {
     public final int MAP_WIDTH;
     public final int MAP_HEIGHT;
     public final double infectionChance;
+    public final double recoveryChance;
+    public final int recoveryTime;
     private final Point leftBottomCorner;
     private final Point rightTopCorner;
 
@@ -18,10 +20,12 @@ public class World implements IWorldMap {
 
     private final HashMap<Point, LinkedList<Person>> people = new HashMap<>();
 
-    public World(int width, int height, double infectionChance) {
+    public World(int width, int height, double infectionChance, double recoveryChance, int recoveryTime) {
         this.MAP_WIDTH = width;
         this.MAP_HEIGHT = height;
         this.infectionChance = infectionChance;
+        this.recoveryChance = recoveryChance;
+        this.recoveryTime = recoveryTime;
         this.leftBottomCorner = new Point(0, 0);
         this.rightTopCorner = new Point(width, height);
     }
@@ -85,50 +89,74 @@ public class World implements IWorldMap {
         return null;
     }
 
-    public int numberPeopleOnMap(){
-        return people.values().stream()
+    public int numberPeopleOnMap() {
+        return (int) people.values().stream()
                 .flatMap(Collection::stream)
-                .collect(Collectors.toList())
-                .size();
+                .count();
     }
 
-    public int numberHealthyPeopleOnMap(){
-        return people.values().stream()
+    public int numberHealthyPeopleOnMap() {
+        return (int) people.values().stream()
                 .flatMap(Collection::stream)
                 .filter(Predicate.not(Person::isInfected))
-                .collect(Collectors.toList())
-                .size();
+                .count();
     }
 
     public int numberInfectedPeopleOnMap() {
-        return people.values().stream()
+        return (int) people.values().stream()
                 .flatMap(Collection::stream)
                 .filter(Person::isInfected)
-                .collect(Collectors.toList())
-                .size();
+                .count();
     }
 
-    public void infectPeople(){
-        people.forEach((position, listOfPeople) -> {
-            if(listOfPeople.size() == 2 && listOfPeople.get(0).isInfected() != listOfPeople.get(1).isInfected()){
-                listOfPeople.sort(Comparator.comparing(Person::isInfected).reversed());
+    public int numberCuredPeopleOnMap() {
+        return (int) people.values().stream()
+                .flatMap(Collection::stream)
+                .filter(Person::isCured)
+                .count();
+    }
 
-                if (listOfPeople.get(0).canInfect() && random.nextDouble() * 100 <= infectionChance) {
-                    listOfPeople.get(1).infect();
-                }
+    public void infectPeople() {
+        people.forEach((position, listOfPeople) -> {
+            if (listOfPeople.size() > 1 && listOfPeople.stream().anyMatch(Person::isInfected)) {
+                listOfPeople.stream()
+                        .filter(Predicate.not(Person::isInfected))
+                        .filter(Predicate.not(Person::isCured))
+                        .forEach(person -> {
+                            if (random.nextDouble() * 100 <= infectionChance) person.infect();
+                        });
             }
         });
     }
 
+    public void recoverPeople() {
+        people.forEach((position, listOfPeople) -> listOfPeople.stream()
+                    .filter(Person::isInfected)
+                    .forEach(person -> {
+                        if (person.infectionTime() >= recoveryTime && random.nextDouble() * 100 <= recoveryChance)
+                            person.cure();
+                        else
+                            person.incInfectionTime();
+                    })
+        );
+    }
+
     public void putStartPeople(int peopleNumber, double percentageOfInfectedPeople) {
         Person person;
+        Person.HealthState healthState;
         for (int i = 0; i < peopleNumber; i++) {
             int x, y;
             do {
                 x = random.nextInt(rightTopCorner.x);
                 y = random.nextInt(rightTopCorner.y);
             } while (isOccupied(new Point(x, y)));
-            person = new Person(new Point(x, y), this, random.nextDouble() * 100 <= percentageOfInfectedPeople);
+
+            if (random.nextDouble() * 100 <= percentageOfInfectedPeople)
+                healthState = Person.HealthState.INFECTED;
+            else
+                healthState = Person.HealthState.HEALTHY;
+
+            person = new Person(new Point(x, y), this, healthState);
             place(person);
         }
     }

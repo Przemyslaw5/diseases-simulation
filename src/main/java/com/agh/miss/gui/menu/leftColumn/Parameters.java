@@ -46,6 +46,21 @@ public class Parameters extends VBox {
         HBox hBoxInfectionChance = new HBox();
         hBoxInfectionChance.getChildren().addAll(infectionChanceLabel, infectionChanceTextField, percentageLabel2);
 
+        Label recoveryChanceLabel = new Label("Recovery chance: ");
+        recoveryChanceLabel.setPrefWidth(210);
+        TextField recoveryChanceTextField = new TextField(String.valueOf(Simulation.RECOVERY_CHANCE));
+        recoveryChanceTextField.setPrefColumnCount(5);
+        Label percentageLabel3 = new Label("%");
+        HBox hBoxRecoveryChance = new HBox();
+        hBoxRecoveryChance.getChildren().addAll(recoveryChanceLabel, recoveryChanceTextField, percentageLabel3);
+
+        Label recoveryTimeLabel = new Label("Days of average recovery time: ");
+        recoveryTimeLabel.setPrefWidth(210);
+        TextField recoveryTimeTextField = new TextField(String.valueOf(Simulation.RECOVERY_TIME));
+        recoveryTimeTextField.setPrefColumnCount(5);
+        HBox hBoxRecoveryTime = new HBox();
+        hBoxRecoveryTime.getChildren().addAll(recoveryTimeLabel, recoveryTimeTextField);
+
         Button submitButton = new Button("Run simulation with given parameters");
 
         //Setting an action for the Submit button
@@ -53,10 +68,14 @@ public class Parameters extends VBox {
             int peopleNumber = Integer.parseInt(peopleTextField.getText());
             double percentageOfInfectedPeople = Double.parseDouble(percentageOfInfectedPeopleTextField.getText());
             double infectionChance = Double.parseDouble(infectionChanceTextField.getText());
+            double recoveryChance = Double.parseDouble(recoveryChanceTextField.getText());
+            int recoveryTime = Integer.parseInt(recoveryTimeTextField.getText());
             visualization.startWithGivenParams(
                     peopleNumber,
                     percentageOfInfectedPeople,
-                    infectionChance
+                    infectionChance,
+                    recoveryChance,
+                    recoveryTime
             );
         });
 
@@ -69,6 +88,8 @@ public class Parameters extends VBox {
             peopleTextField.setText(String.valueOf(Simulation.PEOPLE_NUMBER));
             percentageOfInfectedPeopleTextField.setText(String.valueOf(Simulation.PERCENTAGE_OF_INFECTED_PEOPLE));
             infectionChanceTextField.setText(String.valueOf(Simulation.INFECTION_CHANCE));
+            recoveryChanceTextField.setText(String.valueOf(Simulation.RECOVERY_CHANCE));
+            recoveryTimeTextField.setText(String.valueOf(Simulation.RECOVERY_TIME));
         });
 
         buttonPausePlay = new Button("Pause");
@@ -84,7 +105,17 @@ public class Parameters extends VBox {
                 this.buttonPausePlay.setText("Pause");
         });
 
-        getChildren().addAll(parametersLabel, hBoxPeople, hBoxPercentageOfInfectedPeople, hBoxInfectionChance, submitButton, clearButton, buttonPausePlay);
+        getChildren().addAll(
+                parametersLabel,
+                hBoxPeople,
+                hBoxPercentageOfInfectedPeople,
+                hBoxInfectionChance,
+                hBoxRecoveryChance,
+                hBoxRecoveryTime,
+                submitButton,
+                clearButton,
+                buttonPausePlay
+        );
         setSpacing(5);
         // up right down left
         setPadding(new Insets(10, 0, 30, 10));
