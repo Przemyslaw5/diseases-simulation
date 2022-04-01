@@ -32,7 +32,7 @@ public class Configuration {
     //Set color based on powerTrace of trace
     public static Color setColorTrace (Trace trace){
         if(trace.getTracePower() >= 90.0)
-            return Color.rgb(99, 51, 9);
+            return TRACE_BIGGEST_CHANCE;
         else if(trace.getTracePower() >= 70.0)
             return Color.rgb(124, 63, 6);
         else if(trace.getTracePower() >= 50.0)
