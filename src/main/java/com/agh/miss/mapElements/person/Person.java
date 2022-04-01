@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Person extends AbstractMapElement {
 
-    public enum Health {
+    public enum HealthState {
         HEALTHY,
         INFECTED,
         CURED,
@@ -20,17 +20,17 @@ public class Person extends AbstractMapElement {
     private MapDirection direction;
     private final World world;
     private int infectionTime;
-    private Health health;
+    private HealthState healthState;
 
 
     private static final Random random = new Random();
 
-    public Person(Point startPosition, World world, Health health) {
+    public Person(Point startPosition, World world, HealthState healthState) {
         super(startPosition);
         direction = MapDirection.getRandomDirection();
         this.world = world;
         this.infectionTime = 0;
-        this.health = health;
+        this.healthState = healthState;
     }
 
     public void changeDirection(){
@@ -53,11 +53,11 @@ public class Person extends AbstractMapElement {
     }
 
     public boolean isInfected() {
-        return health.equals(Health.INFECTED);
+        return healthState.equals(HealthState.INFECTED);
     }
 
     public boolean isCured() {
-        return health.equals(Health.CURED);
+        return healthState.equals(HealthState.CURED);
     }
 
     public int infectionTime() {
@@ -65,11 +65,11 @@ public class Person extends AbstractMapElement {
     }
 
     public void infect(){
-        health = Health.INFECTED;
+        healthState = HealthState.INFECTED;
     }
 
     public boolean canInfect(){
-        return health.equals(Health.INFECTED);
+        return healthState.equals(HealthState.INFECTED);
     }
 
     public void incInfectionTime() {
@@ -77,7 +77,7 @@ public class Person extends AbstractMapElement {
     }
 
     public void cure() {
-        health = Health.CURED;
+        healthState = HealthState.CURED;
         infectionTime = 0;
     }
 

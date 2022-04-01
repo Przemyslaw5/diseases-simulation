@@ -90,63 +90,60 @@ public class World implements IWorldMap {
     }
 
     public int numberPeopleOnMap() {
-        return people.values().stream()
+        return (int) people.values().stream()
                 .flatMap(Collection::stream)
-                .collect(Collectors.toList())
-                .size();
+                .count();
     }
 
     public int numberHealthyPeopleOnMap() {
-        return people.values().stream()
+        return (int) people.values().stream()
                 .flatMap(Collection::stream)
                 .filter(Predicate.not(Person::isInfected))
-                .collect(Collectors.toList())
-                .size();
+                .count();
     }
 
     public int numberInfectedPeopleOnMap() {
-        return people.values().stream()
+        return (int) people.values().stream()
                 .flatMap(Collection::stream)
                 .filter(Person::isInfected)
-                .collect(Collectors.toList())
-                .size();
+                .count();
     }
 
     public int numberCuredPeopleOnMap() {
-        return people.values().stream()
+        return (int) people.values().stream()
                 .flatMap(Collection::stream)
                 .filter(Person::isCured)
-                .collect(Collectors.toList())
-                .size();
+                .count();
     }
 
     public void infectPeople() {
         people.forEach((position, listOfPeople) -> {
             if (listOfPeople.size() > 1 && listOfPeople.stream().anyMatch(Person::isInfected)) {
-                listOfPeople.forEach(person -> {
-                    if (!person.isInfected() && !person.isCured() && random.nextDouble() * 100 <= infectionChance) {
-                        person.infect();
-                    }
-                });
+                listOfPeople.stream()
+                        .filter(Predicate.not(Person::isInfected))
+                        .filter(Predicate.not(Person::isCured))
+                        .forEach(person -> {
+                            if (random.nextDouble() * 100 <= infectionChance) person.infect();
+                        });
             }
         });
     }
 
     public void recoverPeople() {
-        people.forEach((position, listOfPeople) -> listOfPeople.forEach((person -> {
-            if (person.isInfected()) {
-                if (person.infectionTime() >= recoveryTime && random.nextDouble() * 100 <= recoveryChance) {
-                    person.cure();
-                } else {
-                    person.incInfectionTime();
-                }
-            }
-        })));
+        people.forEach((position, listOfPeople) -> listOfPeople.stream()
+                    .filter(Person::isInfected)
+                    .forEach(person -> {
+                        if (person.infectionTime() >= recoveryTime && random.nextDouble() * 100 <= recoveryChance)
+                            person.cure();
+                        else
+                            person.incInfectionTime();
+                    })
+        );
     }
 
     public void putStartPeople(int peopleNumber, double percentageOfInfectedPeople) {
         Person person;
-        Person.Health health;
+        Person.HealthState healthState;
         for (int i = 0; i < peopleNumber; i++) {
             int x, y;
             do {
@@ -155,11 +152,11 @@ public class World implements IWorldMap {
             } while (isOccupied(new Point(x, y)));
 
             if (random.nextDouble() * 100 <= percentageOfInfectedPeople)
-                health = Person.Health.INFECTED;
+                healthState = Person.HealthState.INFECTED;
             else
-                health = Person.Health.HEALTHY;
+                healthState = Person.HealthState.HEALTHY;
 
-            person = new Person(new Point(x, y), this, health);
+            person = new Person(new Point(x, y), this, healthState);
             place(person);
         }
     }
