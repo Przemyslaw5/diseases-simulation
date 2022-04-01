@@ -33,7 +33,14 @@ public class Statistics extends VBox {
         this.infectedPeopleLabel = new Label("Infected people: " + visualization.simulation.world.numberInfectedPeopleOnMap());
         this.curedPeopleLabel = new Label("Cured people: " + visualization.simulation.world.numberCuredPeopleOnMap());
 
-        getChildren().addAll(labelStats, dayLabel, peopleLabel, healthyPeopleLabel, infectedPeopleLabel, curedPeopleLabel);
+        getChildren().addAll(
+                labelStats,
+                dayLabel,
+                peopleLabel,
+                healthyPeopleLabel,
+                infectedPeopleLabel,
+                curedPeopleLabel
+        );
 
         // up right down left
         setPadding(new Insets(10, 0, 30, 10));

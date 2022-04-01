@@ -12,6 +12,7 @@ public class Simulation {
     public static final double INFECTION_CHANCE = 30.0;
     public static final double RECOVERY_CHANCE = 60.0;
     public static final int RECOVERY_TIME = 210;
+    public static final double DEATH_CHANCE = 0.0;
 
     public World world;
     public int dayOfSimulation = 1;
@@ -24,7 +25,8 @@ public class Simulation {
                 PERCENTAGE_OF_INFECTED_PEOPLE,
                 INFECTION_CHANCE,
                 RECOVERY_CHANCE,
-                RECOVERY_TIME
+                RECOVERY_TIME,
+                DEATH_CHANCE
         );
     }
 
@@ -32,7 +34,8 @@ public class Simulation {
                                                   double percentageOfInfectedPeople,
                                                   double infectionChance,
                                                   double recoveryChance,
-                                                  int recoveryTime
+                                                  int recoveryTime,
+                                                  double deathChance
     ) {
         return new Simulation(
                 WIDTH,
@@ -41,7 +44,8 @@ public class Simulation {
                 percentageOfInfectedPeople,
                 infectionChance,
                 recoveryChance,
-                recoveryTime
+                recoveryTime,
+                deathChance
         );
     }
 
@@ -52,9 +56,10 @@ public class Simulation {
             double percentageOfInfectedPeople,
             double infectionChance,
             double recoveryChance,
-            int recoveryTime
+            int recoveryTime,
+            double deathChance
     ) {
-        world = new World(width, height, infectionChance, recoveryChance, recoveryTime);
+        world = new World(width, height, infectionChance, recoveryChance, recoveryTime, deathChance);
         world.putStartPeople(peopleNumber, percentageOfInfectedPeople);
     }
 
@@ -63,6 +68,8 @@ public class Simulation {
         world.run();
         world.infectPeople();
         world.recoverPeople();
+        world.killPeople();
+        world.removeDeadPeople();
     }
 
 }
