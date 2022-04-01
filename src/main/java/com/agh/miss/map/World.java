@@ -146,13 +146,20 @@ public class World implements IWorldMap {
 
     public void putStartPeople(int peopleNumber, double percentageOfInfectedPeople) {
         Person person;
+        Person.Health health;
         for (int i = 0; i < peopleNumber; i++) {
             int x, y;
             do {
                 x = random.nextInt(rightTopCorner.x);
                 y = random.nextInt(rightTopCorner.y);
             } while (isOccupied(new Point(x, y)));
-            person = new Person(new Point(x, y), this, random.nextDouble() * 100 <= percentageOfInfectedPeople);
+
+            if (random.nextDouble() * 100 <= percentageOfInfectedPeople)
+                health = Person.Health.INFECTED;
+            else
+                health = Person.Health.HEALTHY;
+
+            person = new Person(new Point(x, y), this, health);
             place(person);
         }
     }
