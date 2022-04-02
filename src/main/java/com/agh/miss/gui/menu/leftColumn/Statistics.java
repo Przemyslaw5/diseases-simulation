@@ -15,6 +15,7 @@ public class Statistics extends VBox {
     private final Label healthyPeopleLabel;
     private final Label infectedPeopleLabel;
     private final Label curedPeopleLabel;
+    private final Label deadPeopleLabel;
 
     private final Visualization visualization;
 
@@ -32,6 +33,7 @@ public class Statistics extends VBox {
         this.healthyPeopleLabel = new Label("Healthy people: " + visualization.simulation.world.numberHealthyPeopleOnMap());
         this.infectedPeopleLabel = new Label("Infected people: " + visualization.simulation.world.numberInfectedPeopleOnMap());
         this.curedPeopleLabel = new Label("Cured people: " + visualization.simulation.world.numberCuredPeopleOnMap());
+        this.deadPeopleLabel = new Label("Cured people: " + visualization.simulation.world.numberDeadPeople());
 
         getChildren().addAll(
                 labelStats,
@@ -39,7 +41,8 @@ public class Statistics extends VBox {
                 peopleLabel,
                 healthyPeopleLabel,
                 infectedPeopleLabel,
-                curedPeopleLabel
+                curedPeopleLabel,
+                deadPeopleLabel
         );
 
         // up right down left
@@ -53,5 +56,6 @@ public class Statistics extends VBox {
         this.healthyPeopleLabel.setText("Healthy people: " + visualization.simulation.world.numberHealthyPeopleOnMap());
         this.infectedPeopleLabel.setText("Infected people: " + visualization.simulation.world.numberInfectedPeopleOnMap());
         this.curedPeopleLabel.setText("Cured people: " + visualization.simulation.world.numberCuredPeopleOnMap());
+        this.deadPeopleLabel.setText("Dead poeple: " + visualization.simulation.world.numberDeadPeople());
     }
 }

@@ -16,12 +16,21 @@ public class World implements IWorldMap {
     public final double deathChance;
     private final Point leftBottomCorner;
     private final Point rightTopCorner;
+    private int startPeopleNumber;
 
     private static final Random random = new Random();
 
     private final HashMap<Point, LinkedList<Person>> people = new HashMap<>();
 
-    public World(int width, int height, double infectionChance, double recoveryChance, int recoveryTime, double deathChance) {
+    public World(
+            int width,
+            int height,
+            double infectionChance,
+            double recoveryChance,
+            int recoveryTime,
+            double deathChance,
+            int startPeopleNumber
+    ) {
         this.MAP_WIDTH = width;
         this.MAP_HEIGHT = height;
         this.infectionChance = infectionChance;
@@ -30,6 +39,7 @@ public class World implements IWorldMap {
         this.deathChance = deathChance;
         this.leftBottomCorner = new Point(0, 0);
         this.rightTopCorner = new Point(width, height);
+        this.startPeopleNumber = startPeopleNumber;
     }
 
     public static Point repairPositionOnMap(Point position, World world) {
@@ -120,6 +130,10 @@ public class World implements IWorldMap {
                 .count();
     }
 
+    public int numberDeadPeople() {
+        return startPeopleNumber - numberPeopleOnMap();
+    }
+
     public void infectPeople() {
         people.forEach((position, listOfPeople) -> {
             if (listOfPeople.size() > 1 && listOfPeople.stream().anyMatch(Person::isInfected)) {
@@ -166,10 +180,10 @@ public class World implements IWorldMap {
                 });
     }
 
-    public void putStartPeople(int peopleNumber, double percentageOfInfectedPeople) {
+    public void putStartPeople(double percentageOfInfectedPeople) {
         Person person;
         Person.HealthState healthState;
-        for (int i = 0; i < peopleNumber; i++) {
+        for (int i = 0; i < startPeopleNumber; i++) {
             int x, y;
             do {
                 x = random.nextInt(rightTopCorner.x);

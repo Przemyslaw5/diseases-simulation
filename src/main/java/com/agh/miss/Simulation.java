@@ -59,8 +59,8 @@ public class Simulation {
             int recoveryTime,
             double deathChance
     ) {
-        world = new World(width, height, infectionChance, recoveryChance, recoveryTime, deathChance);
-        world.putStartPeople(peopleNumber, percentageOfInfectedPeople);
+        world = new World(width, height, infectionChance, recoveryChance, recoveryTime, deathChance, peopleNumber);
+        world.putStartPeople(percentageOfInfectedPeople);
     }
 
     public void simulateDay() {
