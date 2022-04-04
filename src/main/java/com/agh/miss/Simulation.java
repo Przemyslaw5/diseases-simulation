@@ -2,8 +2,6 @@ package com.agh.miss;
 
 import com.agh.miss.map.World;
 
-import java.util.List;
-
 public class Simulation {
 
     // Default parameters
