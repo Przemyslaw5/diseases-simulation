@@ -33,7 +33,7 @@ public class Trace extends AbstractMapElement {
         MAX_TRACE_TIME = maxTraceTime + 1;
     }
 
-    public int getCurrentTraceDay() {
+    public int getColorNumber() {
         return currentTraceDay + 1;
     }
 
