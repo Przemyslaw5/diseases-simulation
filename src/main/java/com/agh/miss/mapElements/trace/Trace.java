@@ -21,7 +21,6 @@ public class Trace extends AbstractMapElement {
         if (currentTraceDay > MAX_TRACE_TIME)
             tracePower = 0.0;
         else tracePower = 100.0 / MAX_TRACE_TIME * (MAX_TRACE_TIME - currentTraceDay);
-        System.out.println(tracePower + " " + currentTraceDay);
     }
 
     public void resetTrace() {
