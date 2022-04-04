@@ -31,17 +31,14 @@ public class Configuration {
 
     //Set color based on powerTrace of trace
     public static Color setColorTrace (Trace trace){
-        if(trace.getTracePower() >= 90.0)
-            return TRACE_BIGGEST_CHANCE;
-        else if(trace.getTracePower() >= 70.0)
-            return Color.rgb(124, 63, 6);
-        else if(trace.getTracePower() >= 50.0)
-            return Color.rgb(150, 75, 0);
-        else if(trace.getTracePower() >= 30.0)
-            return Color.rgb(172, 103, 48);
-        else if(trace.getTracePower() >= 10.0)
-            return Color.rgb(192, 132, 87);
-        else
-            return Color.rgb(211, 162, 127);
+        return switch (trace.getCurrentTraceDay()) {
+            case 1 -> Color.rgb(99, 51, 9);
+            case 2 -> Color.rgb(124, 63, 6);
+            case 3 -> Color.rgb(150, 75, 0);
+            case 4 -> Color.rgb(172, 103, 48);
+            case 5 -> Color.rgb(192, 132, 87);
+            case 6 -> Color.rgb(211, 162, 127);
+            default -> throw new IllegalStateException("Unexpected value: " + trace.getCurrentTraceDay());
+        };
     }
 }

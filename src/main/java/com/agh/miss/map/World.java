@@ -130,7 +130,7 @@ public class World implements IWorldMap {
 
     public void infectPeople() {
         traces.forEach((position, trace) -> {
-            if (people.get(position) != null && people.get(position).stream().anyMatch(Predicate.not(Person::isInfected))) {
+            if (people.get(position) != null && people.get(position).stream().anyMatch(Person::isInfected)) {
                 people.get(position).stream()
                         .filter(Predicate.not(Person::isInfected))
                         .filter(Predicate.not(Person::isCured))
@@ -185,7 +185,7 @@ public class World implements IWorldMap {
         List<Trace> tmpTraces = traces.values().stream().toList();
 
         tmpTraces.forEach(trace -> {
-            trace.updateTraceAfterDay();
+            trace.updateTrace();
             if (trace.getTracePower() == 0.0) {
                 traces.remove(trace.getPosition());
             }

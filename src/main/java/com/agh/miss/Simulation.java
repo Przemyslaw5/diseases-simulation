@@ -12,9 +12,9 @@ public class Simulation {
     public static final int PEOPLE_NUMBER = 50;
     public static final double PERCENTAGE_OF_INFECTED_PEOPLE = 5.0;
     public static final double INFECTION_CHANCE = 30.0;
-    public static final double RECOVERY_CHANCE = 3.0;
+    public static final double RECOVERY_CHANCE = 60.0;
     public static final int RECOVERY_TIME = 210;
-    public static final List<Double> TRACE_POWERS = List.of(100.0, 80.0, 60.0, 40.0, 20.0, 5.0);
+    public static final int TRACE_TIME = 5;
 
     public World world;
     public int dayOfSimulation = 1;
@@ -66,7 +66,6 @@ public class Simulation {
         world.run();
         world.infectPeople();
         world.recoverPeople();
-        world.updateAndRemoveOldTraces();
     }
 
 }

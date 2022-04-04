@@ -7,23 +7,34 @@ import com.agh.miss.parametersObject.Point;
 public class Trace extends AbstractMapElement {
 
     private double tracePower;
-    private int tracePowerIndex;
+    private int currentTraceDay;
+
+    private static int MAX_TRACE_TIME = Simulation.TRACE_TIME + 1;
 
     public Trace(Point startPosition) {
         super(startPosition);
         resetTrace();
     }
 
-    public void updateTraceAfterDay() {
-        tracePowerIndex++;
-        if (tracePowerIndex >= Simulation.TRACE_POWERS.size())
+    public void updateTrace() {
+        currentTraceDay++;
+        if (currentTraceDay > MAX_TRACE_TIME)
             tracePower = 0.0;
-        else tracePower = Simulation.TRACE_POWERS.get(tracePowerIndex);
+        else tracePower = 100.0 / MAX_TRACE_TIME * (MAX_TRACE_TIME - currentTraceDay);
+        System.out.println(tracePower + " " + currentTraceDay);
     }
 
     public void resetTrace() {
-        tracePowerIndex = 0;
-        tracePower = Simulation.TRACE_POWERS.get(tracePowerIndex);
+        currentTraceDay = 0;
+        tracePower = 100.0;
+    }
+
+    public static void setMaxTraceTime(int maxTraceTime) {
+        MAX_TRACE_TIME = maxTraceTime + 1;
+    }
+
+    public int getCurrentTraceDay() {
+        return currentTraceDay + 1;
     }
 
     public double getTracePower() {
