@@ -53,22 +53,22 @@ public class Person extends AbstractMapElement {
     }
 
     public boolean isHealthy() {
-        return this.healthState.equals(HealthState.HEALTHY);
+        return this.healthState == HealthState.HEALTHY;
     }
 
     public boolean isInfected() {
-        return this.healthState.equals(HealthState.INFECTED);
+        return this.healthState == HealthState.INFECTED;
     }
 
     public boolean isCured() {
-        return this.healthState.equals(HealthState.CURED);
+        return this.healthState == HealthState.CURED;
     }
 
     public boolean isDead() {
-        return this.healthState.equals(HealthState.DEAD);
+        return this.healthState == HealthState.DEAD;
     }
 
-    public HealthState healthState() {
+    public HealthState getHealthState() {
         return this.healthState;
     }
 
@@ -81,7 +81,7 @@ public class Person extends AbstractMapElement {
     }
 
     public boolean canInfect() {
-        return this.healthState.equals(HealthState.INFECTED);
+        return this.healthState == HealthState.INFECTED;
     }
 
     public void incInfectionTime() {

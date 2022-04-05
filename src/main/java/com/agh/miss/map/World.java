@@ -6,7 +6,6 @@ import com.agh.miss.parametersObject.Point;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class World implements IWorldMap {
     public final int MAP_WIDTH;
@@ -27,21 +26,21 @@ public class World implements IWorldMap {
     public World(
             int width,
             int height,
+            int startPeopleNumber,
             double infectionChance,
             double recoveryChance,
             int recoveryTime,
-            double deathChance,
-            int startPeopleNumber
+            double deathChance
     ) {
         this.MAP_WIDTH = width;
         this.MAP_HEIGHT = height;
+        this.startPeopleNumber = startPeopleNumber;
         this.infectionChance = infectionChance;
         this.recoveryChance = recoveryChance;
         this.recoveryTime = recoveryTime;
         this.deathChance = deathChance;
         this.leftBottomCorner = new Point(0, 0);
         this.rightTopCorner = new Point(width, height);
-        this.startPeopleNumber = startPeopleNumber;
     }
 
     public static Point repairPositionOnMap(Point position, World world) {

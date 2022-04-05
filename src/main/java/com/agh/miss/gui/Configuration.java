@@ -20,14 +20,12 @@ public class Configuration {
 
     //Set color based if person is infected
     public static Color setColorPerson(Person person, World world) {
-        switch (person.healthState()) {
-            case INFECTED:
-                return INFECTED_PERSON_COLOR;
-            case CURED:
-                return CURED_PERSON_COLOR;
-            default:
-                return HEALTHY_PERSON_COLOR;
-        }
+        return switch (person.getHealthState()) {
+            case INFECTED -> INFECTED_PERSON_COLOR;
+            case CURED -> CURED_PERSON_COLOR;
+            // death people are removed before setting the color, so they won't be considered in this case
+            default -> HEALTHY_PERSON_COLOR;
+        };
     }
 
     //Set color based on powerTrace of trace

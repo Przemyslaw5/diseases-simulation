@@ -60,7 +60,7 @@ public class Simulation {
             int recoveryTime,
             double deathChance
     ) {
-        world = new World(width, height, infectionChance, recoveryChance, recoveryTime, deathChance, peopleNumber);
+        world = new World(width, height, peopleNumber, infectionChance, recoveryChance, recoveryTime, deathChance);
         world.putStartPeople(percentageOfInfectedPeople);
     }
 
