@@ -146,10 +146,12 @@ public class World implements IWorldMap {
 
     public void infectPeople() {
         traces.forEach((position, trace) -> {
-            people.get(position).stream()
-                    .filter(Person::isHealthy)
-                    .filter(person -> random.nextDouble() * 100 <= infectionChance * trace.getTracePower() / 100)
-                    .forEach(Person::infect);
+            if (people.get(position) != null) {
+                people.get(position).stream()
+                        .filter(Person::isHealthy)
+                        .filter(person -> random.nextDouble() * 100 <= infectionChance * trace.getTracePower() / 100)
+                        .forEach(Person::infect);
+            }
         });
     }
 
