@@ -1,6 +1,7 @@
 package com.agh.miss.map;
 
 import com.agh.miss.mapElements.person.Person;
+import com.agh.miss.mapElements.trace.Trace;
 import com.agh.miss.parametersObject.Point;
 
 import java.util.*;
@@ -21,6 +22,7 @@ public class World implements IWorldMap {
     private static final Random random = new Random();
 
     private final HashMap<Point, LinkedList<Person>> people = new HashMap<>();
+    private final HashMap<Point, Trace> traces = new HashMap<>();
 
     public World(
             int width,
@@ -75,9 +77,18 @@ public class World implements IWorldMap {
                 people.put(person.getPosition(), new LinkedList<>());
             }
             people.get(person.getPosition()).add(person);
+
+            if (person.canInfect()) placeTrace(person);
             return true;
         }
         return false;
+    }
+
+    public void placeTrace(Person person) {
+        if (traces.containsKey(person.getPosition()))
+            traces.get(person.getPosition()).resetTrace();
+        else
+            traces.put(person.getPosition(), new Trace(person.getPosition()));
     }
 
     @Override
@@ -86,20 +97,21 @@ public class World implements IWorldMap {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        allPeople.forEach(Person::changeDirection);           //Every person must turn
-        allPeople.forEach(Person::move);           //Every person must move
+        allPeople.forEach(Person::changeDirection);  //Every person must turn
+        allPeople.forEach(Person::move);             //Every person must move
     }
 
     @Override
     public boolean isOccupied(Point position) {
-        return people.get(position) != null;
+        if (people.get(position) != null) return true;
+        return traces.get(position) != null;
     }
 
     @Override
     public Object objectAt(Point position) {
         if (people.get(position) != null)
             return people.get(position).get(0);
-        return null;
+        return traces.get(position);
     }
 
     public int numberPeopleOnMap() {
@@ -135,13 +147,11 @@ public class World implements IWorldMap {
     }
 
     public void infectPeople() {
-        people.forEach((position, listOfPeople) -> {
-            if (listOfPeople.size() > 1 && listOfPeople.stream().anyMatch(Person::isInfected)) {
-                listOfPeople.stream()
-                        .filter(Person::isHealthy)
-                        .filter(person -> random.nextDouble() * 100 <= infectionChance)
-                        .forEach(Person::infect);
-            }
+        traces.forEach((position, trace) -> {
+            people.get(position).stream()
+                    .filter(Person::isHealthy)
+                    .filter(person -> random.nextDouble() * 100 <= infectionChance * trace.getTracePower() / 100)
+                    .forEach(Person::infect);
         });
     }
 
@@ -177,7 +187,8 @@ public class World implements IWorldMap {
                     if (this.people.get(person.getPosition()).isEmpty()) {
                         this.people.remove(person.getPosition());
                     }
-                });
+                }
+        );
     }
 
     public void putStartPeople(double percentageOfInfectedPeople) {
@@ -205,6 +216,17 @@ public class World implements IWorldMap {
 
         if (people.get(oldPosition).isEmpty()) people.remove(oldPosition);
         this.place(person);
+    }
+
+    public void updateAndRemoveOldTraces() {
+        List<Trace> tmpTraces = traces.values().stream().toList();
+
+        tmpTraces.forEach(trace -> {
+            trace.updateTrace();
+            if (trace.getTracePower() == 0.0) {
+                traces.remove(trace.getPosition());
+            }
+        });
     }
 
     @Override

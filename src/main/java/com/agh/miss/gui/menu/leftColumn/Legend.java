@@ -6,7 +6,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
 public class Legend extends VBox {
@@ -33,7 +35,12 @@ public class Legend extends VBox {
         circle3.setFill(Configuration.CURED_PERSON_COLOR);
         HBox thirdElement = new HBox(circle3, curedPerson);
 
-        getChildren().addAll(labelLegend, firstElement, secondElement, thirdElement);
+        Label trace = new Label("    - Trace, the lighter the less chance to infect");
+        Rectangle rectangle1 = new Rectangle(20, 20);
+        rectangle1.setFill(Configuration.TRACE_BIGGEST_CHANCE);
+        HBox fourthElement = new HBox(rectangle1, trace);
+
+        getChildren().addAll(labelLegend, firstElement, secondElement, thirdElement, fourthElement);
 
         // up right down left
         setPadding(new Insets(10, 0, 30, 10));
