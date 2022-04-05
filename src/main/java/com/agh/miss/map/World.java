@@ -200,7 +200,7 @@ public class World implements IWorldMap {
                 y = random.nextInt(rightTopCorner.y);
             } while (isOccupied(new Point(x, y)));
 
-            if (random.nextDouble() * 100 <= percentageOfInfectedPeople)
+            if (i < startPeopleNumber * percentageOfInfectedPeople / 100)
                 healthState = Person.HealthState.INFECTED;
             else
                 healthState = Person.HealthState.HEALTHY;
