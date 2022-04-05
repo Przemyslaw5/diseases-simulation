@@ -33,7 +33,7 @@ public class Statistics extends VBox {
         this.healthyPeopleLabel = new Label("Healthy people: " + visualization.simulation.world.numberHealthyPeopleOnMap());
         this.infectedPeopleLabel = new Label("Infected people: " + visualization.simulation.world.numberInfectedPeopleOnMap());
         this.curedPeopleLabel = new Label("Cured people: " + visualization.simulation.world.numberCuredPeopleOnMap());
-        this.deadPeopleLabel = new Label("Cured people: " + visualization.simulation.world.numberDeadPeople());
+        this.deadPeopleLabel = new Label("Dead people: " + visualization.simulation.world.numberDeadPeople());
 
         getChildren().addAll(
                 labelStats,

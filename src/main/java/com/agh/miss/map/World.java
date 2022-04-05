@@ -17,7 +17,7 @@ public class World implements IWorldMap {
     public final double deathChance;
     private final Point leftBottomCorner;
     private final Point rightTopCorner;
-    private int startPeopleNumber;
+    private final int startPeopleNumber;
 
     private static final Random random = new Random();
 
@@ -94,8 +94,7 @@ public class World implements IWorldMap {
     @Override
     public void run() {
         List<Person> allPeople = people.values().stream()
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                .flatMap(Collection::stream).toList();
 
         allPeople.forEach(Person::changeDirection);  //Every person must turn
         allPeople.forEach(Person::move);             //Every person must move
@@ -177,8 +176,7 @@ public class World implements IWorldMap {
 
     public void removeDeadPeople() {
         List<Person> allPeople = people.values().stream()
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                .flatMap(Collection::stream).toList();
 
         allPeople.stream()
                 .filter(Person::isDead)

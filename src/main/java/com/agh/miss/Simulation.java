@@ -15,7 +15,6 @@ public class Simulation {
     public static final double DEATH_CHANCE = 10.0;
     public static final int TRACE_TIME = 5;
 
-
     public World world;
     public int dayOfSimulation = 1;
 
