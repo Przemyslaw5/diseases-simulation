@@ -62,7 +62,7 @@ public class Parameters extends VBox {
         HBox hBoxRecoveryTime = new HBox();
         hBoxRecoveryTime.getChildren().addAll(recoveryTimeLabel, recoveryTimeTextField);
 
-        Label traceTimeLabel = new Label("Days of trace time [1 to 5]: ");
+        Label traceTimeLabel = new Label("Days of trace time [0 to 5]: ");
         traceTimeLabel.setPrefWidth(210);
         TextField traceTimeTextField = new TextField(String.valueOf(Simulation.TRACE_TIME));
         traceTimeTextField.setPrefColumnCount(5);
