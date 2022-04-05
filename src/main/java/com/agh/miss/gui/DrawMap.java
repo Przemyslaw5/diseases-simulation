@@ -2,6 +2,7 @@ package com.agh.miss.gui;
 
 import com.agh.miss.Simulation;
 import com.agh.miss.mapElements.person.Person;
+import com.agh.miss.mapElements.trace.Trace;
 import com.agh.miss.parametersObject.Point;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -26,7 +27,7 @@ public class DrawMap {
                     pane.getChildren().add(rectangle);
                 }
 
-                //If is person
+                //If is person or trace
                 if(simulation.world.isOccupied(objectPoint)){
 
                     Shape shape;
@@ -34,11 +35,23 @@ public class DrawMap {
                     //If is person
                     if(simulation.world.objectAt(objectPoint) instanceof Person){
 
-                            //Set Shape, position and color
-                            shape = new Circle(1.5 * gridSize + gridSize * i, 1.5 * gridSize + gridSize * j, gridSize * 0.5);
-                            shape.setFill(Configuration.setColorPerson((Person) simulation.world.objectAt(objectPoint), simulation.world));
+                        //Set Shape, position and color
+                        shape = new Circle(1.5 * gridSize + gridSize * i, 1.5 * gridSize + gridSize * j, gridSize * 0.5);
+                        shape.setFill(Configuration.setColorPerson((Person) simulation.world.objectAt(objectPoint), simulation.world));
 
-                            pane.getChildren().add(shape);
+                        pane.getChildren().add(shape);
+                    }
+
+                    //If is trace
+                    else {
+
+                        //Set Shape, position and color
+                        shape = new Rectangle(gridSize, gridSize);
+                        shape.setTranslateX(gridSize + gridSize * i);
+                        shape.setTranslateY(gridSize + gridSize * j);
+                        shape.setFill(Configuration.setColorTrace((Trace) simulation.world.objectAt(objectPoint)));
+
+                        pane.getChildren().add(shape);
                     }
                 }
             }

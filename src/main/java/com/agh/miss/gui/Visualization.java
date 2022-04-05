@@ -100,6 +100,7 @@ public class Visualization extends Application {
         mapElementsPane.getChildren().clear();
         simulation.simulateDay();
         drawMap.draw(simulation, mapElementsPane, GRID_SIZE);
+        simulation.world.updateAndRemoveOldTraces();
         menu.onUpdate();
     }
 
