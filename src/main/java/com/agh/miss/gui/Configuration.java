@@ -8,9 +8,8 @@ import javafx.scene.paint.Color;
 public class Configuration {
 
     public final static Color HEALTHY_PERSON_COLOR = Color.rgb(255, 215, 150);
-    public final static Color INFECTED_PERSON_COLOR = Color.rgb(255,0,0);
-    public final static Color CURED_PERSON_COLOR = Color.rgb(78,235,0);
-
+    public final static Color INFECTED_PERSON_COLOR = Color.rgb(255, 0, 0);
+    public final static Color CURED_PERSON_COLOR = Color.rgb(78, 235, 0);
     public final static Color TRACE_BIGGEST_CHANCE = Color.rgb(99, 51, 9);
 
     public static int setGridSize(int availableWidth, int availableHeight, int mapWidth, int mapHeight){
@@ -20,13 +19,13 @@ public class Configuration {
     }
 
     //Set color based if person is infected
-    public static Color setColorPerson (Person person, World world){
-        if (person.isInfected())
-            return INFECTED_PERSON_COLOR;
-        else if (person.isCured())
-            return CURED_PERSON_COLOR;
-        else
-            return HEALTHY_PERSON_COLOR;
+    public static Color setColorPerson(Person person, World world) {
+        return switch (person.getHealthState()) {
+            case INFECTED -> INFECTED_PERSON_COLOR;
+            case CURED -> CURED_PERSON_COLOR;
+            // death people are removed before setting the color, so they won't be considered in this case
+            default -> HEALTHY_PERSON_COLOR;
+        };
     }
 
     //Set color based on powerTrace of trace

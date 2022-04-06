@@ -33,14 +33,14 @@ public class Person extends AbstractMapElement {
         this.healthState = healthState;
     }
 
-    public void changeDirection(){
+    public void changeDirection() {
         int numberToTurn = random.nextInt(8);
-        for(int i = 0; i < numberToTurn; i++){
+        for (int i = 0; i < numberToTurn; i++) {
             this.direction = this.direction.next();
         }
     }
 
-    public void move(){
+    public void move() {
 
         //If the person goes beyond the map, it appears from the other side
         Point newPosition = this.getPosition().add(this.direction.toUnitVector());
@@ -52,24 +52,36 @@ public class Person extends AbstractMapElement {
         world.positionChanged(oldPosition, this);
     }
 
+    public boolean isHealthy() {
+        return this.healthState == HealthState.HEALTHY;
+    }
+
     public boolean isInfected() {
-        return healthState.equals(HealthState.INFECTED);
+        return this.healthState == HealthState.INFECTED;
     }
 
     public boolean isCured() {
-        return healthState.equals(HealthState.CURED);
+        return this.healthState == HealthState.CURED;
+    }
+
+    public boolean isDead() {
+        return this.healthState == HealthState.DEAD;
+    }
+
+    public HealthState getHealthState() {
+        return this.healthState;
     }
 
     public int infectionTime() {
         return infectionTime;
     }
 
-    public void infect(){
-        healthState = HealthState.INFECTED;
+    public void infect() {
+        this.healthState = HealthState.INFECTED;
     }
 
-    public boolean canInfect(){
-        return healthState.equals(HealthState.INFECTED);
+    public boolean canInfect() {
+        return this.healthState == HealthState.INFECTED;
     }
 
     public void incInfectionTime() {
@@ -77,7 +89,12 @@ public class Person extends AbstractMapElement {
     }
 
     public void cure() {
-        healthState = HealthState.CURED;
+        this.healthState = HealthState.CURED;
+        infectionTime = 0;
+    }
+
+    public void die() {
+        this.healthState = HealthState.DEAD;
         infectionTime = 0;
     }
 
