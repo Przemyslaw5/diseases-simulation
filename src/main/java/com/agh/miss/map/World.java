@@ -10,13 +10,13 @@ import java.util.function.Predicate;
 public class World implements IWorldMap {
     public final int MAP_WIDTH;
     public final int MAP_HEIGHT;
-    public final double infectionChance;
-    public final double recoveryChance;
-    public final int recoveryTime;
-    public final double deathChance;
+    private final int startPeopleNumber;
+    private final double infectionChance;
+    private final double recoveryChance;
+    private final int recoveryTime;
+    private final double deathChance;
     private final Point leftBottomCorner;
     private final Point rightTopCorner;
-    private final int startPeopleNumber;
 
     private static final Random random = new Random();
 
@@ -226,6 +226,10 @@ public class World implements IWorldMap {
                 traces.remove(trace.getPosition());
             }
         });
+    }
+
+    public int getStartPeopleNumber() {
+        return startPeopleNumber;
     }
 
     @Override

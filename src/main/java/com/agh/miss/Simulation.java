@@ -7,6 +7,7 @@ public class Simulation {
     // Default parameters
     public static final int WIDTH = 50;
     public static final int HEIGHT = 50;
+
     public static final int PEOPLE_NUMBER = 50;
     public static final double PERCENTAGE_OF_INFECTED_PEOPLE = 5.0;
     public static final double INFECTION_CHANCE = 30.0;
@@ -14,6 +15,8 @@ public class Simulation {
     public static final int RECOVERY_TIME = 210;
     public static final double DEATH_CHANCE = 10.0;
     public static final int TRACE_TIME = 5;
+
+    public static final int NUMBER_OF_DAYS_AFTER_CHARTS_UPDATE = 10;
 
     public World world;
     public int dayOfSimulation = 1;

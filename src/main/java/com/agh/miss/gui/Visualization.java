@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class Visualization extends Application {
 
     private static final int AVAILABLE_WIDTH  = 1500;
@@ -96,6 +95,7 @@ public class Visualization extends Application {
                 deathChance
         );
         menu.getParameters().resetPausePlayButton();
+        menu.getPieChartPeople().restartPieChart(simulation, peopleNumber);
     }
 
     private void simulationStep(Simulation simulation, Pane mapElementsPane, Menu menu, DrawMap drawMap) {
@@ -103,7 +103,7 @@ public class Visualization extends Application {
         simulation.simulateDay();
         drawMap.draw(simulation, mapElementsPane, GRID_SIZE);
         simulation.world.updateAndRemoveOldTraces();
-        menu.onUpdate();
+        menu.update();
     }
 
     public static void main(String[] args) {

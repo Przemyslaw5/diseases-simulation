@@ -50,7 +50,7 @@ public class Statistics extends VBox {
     }
 
     //Each day statistics must be update
-    public void onUpdate(){
+    public void update(){
         this.dayLabel.setText("Day: " + visualization.simulation.dayOfSimulation);
         this.peopleLabel.setText("People: " + visualization.simulation.world.numberPeopleOnMap());
         this.healthyPeopleLabel.setText("Healthy people: " + visualization.simulation.world.numberHealthyPeopleOnMap());
