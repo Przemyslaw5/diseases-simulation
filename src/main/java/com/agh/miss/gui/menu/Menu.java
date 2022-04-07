@@ -26,6 +26,7 @@ public class Menu extends HBox {
         this.parameters = new Parameters(visualization);
         this.legend = new Legend();
         this.pieChartPeople = new PieChartPeople(simulation);
+
         PieChart pieChart = pieChartPeople.getPieChart();
 
         VBox leftColumn = new VBox();
