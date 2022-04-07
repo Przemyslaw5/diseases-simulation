@@ -2,6 +2,7 @@ package com.agh.miss.gui.menu.leftColumn;
 
 import com.agh.miss.Simulation;
 import com.agh.miss.gui.Visualization;
+import com.agh.miss.mapElements.trace.Trace;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -61,6 +62,21 @@ public class Parameters extends VBox {
         HBox hBoxRecoveryTime = new HBox();
         hBoxRecoveryTime.getChildren().addAll(recoveryTimeLabel, recoveryTimeTextField);
 
+        Label deathChanceLabel = new Label("Death chance: ");
+        deathChanceLabel.setPrefWidth(210);
+        TextField deathChanceTextField = new TextField(String.valueOf(Simulation.DEATH_CHANCE));
+        deathChanceTextField.setPrefColumnCount(5);
+        Label percentageLabel4 = new Label("%");
+        HBox hBoxDeathChance = new HBox();
+        hBoxDeathChance.getChildren().addAll(deathChanceLabel, deathChanceTextField, percentageLabel4);
+
+        Label traceTimeLabel = new Label("Days of trace time [0 to 5]: ");
+        traceTimeLabel.setPrefWidth(210);
+        TextField traceTimeTextField = new TextField(String.valueOf(Simulation.TRACE_TIME));
+        traceTimeTextField.setPrefColumnCount(5);
+        HBox hBoxTraceTime = new HBox();
+        hBoxTraceTime.getChildren().addAll(traceTimeLabel, traceTimeTextField);
+
         Button submitButton = new Button("Run simulation with given parameters");
 
         //Setting an action for the Submit button
@@ -70,12 +86,16 @@ public class Parameters extends VBox {
             double infectionChance = Double.parseDouble(infectionChanceTextField.getText());
             double recoveryChance = Double.parseDouble(recoveryChanceTextField.getText());
             int recoveryTime = Integer.parseInt(recoveryTimeTextField.getText());
+            double deathChance = Double.parseDouble(deathChanceTextField.getText());
+            Trace.setMaxTraceTime(Integer.parseInt(traceTimeTextField.getText()));
+
             visualization.startWithGivenParams(
                     peopleNumber,
                     percentageOfInfectedPeople,
                     infectionChance,
                     recoveryChance,
-                    recoveryTime
+                    recoveryTime,
+                    deathChance
             );
         });
 
@@ -90,6 +110,8 @@ public class Parameters extends VBox {
             infectionChanceTextField.setText(String.valueOf(Simulation.INFECTION_CHANCE));
             recoveryChanceTextField.setText(String.valueOf(Simulation.RECOVERY_CHANCE));
             recoveryTimeTextField.setText(String.valueOf(Simulation.RECOVERY_TIME));
+            deathChanceTextField.setText(String.valueOf(Simulation.DEATH_CHANCE));
+            traceTimeTextField.setText(String.valueOf(Simulation.TRACE_TIME));
         });
 
         buttonPausePlay = new Button("Pause");
@@ -112,6 +134,8 @@ public class Parameters extends VBox {
                 hBoxInfectionChance,
                 hBoxRecoveryChance,
                 hBoxRecoveryTime,
+                hBoxDeathChance,
+                hBoxTraceTime,
                 submitButton,
                 clearButton,
                 buttonPausePlay

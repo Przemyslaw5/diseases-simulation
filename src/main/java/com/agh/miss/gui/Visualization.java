@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class Visualization extends Application {
 
     private static final int AVAILABLE_WIDTH  = 1500;
@@ -84,23 +83,27 @@ public class Visualization extends Application {
                                      double percentageOfInfectedPeople,
                                      double infectionChance,
                                      double recoveryChance,
-                                     int recoveryTime
+                                     int recoveryTime,
+                                     double deathChance
     ) {
         this.simulation = Simulation.startWithGivenParams(
                 peopleNumber,
                 percentageOfInfectedPeople,
                 infectionChance,
                 recoveryChance,
-                recoveryTime
+                recoveryTime,
+                deathChance
         );
         menu.getParameters().resetPausePlayButton();
+        menu.getPieChartPeople().restartPieChart(simulation, peopleNumber);
     }
 
     private void simulationStep(Simulation simulation, Pane mapElementsPane, Menu menu, DrawMap drawMap) {
         mapElementsPane.getChildren().clear();
         simulation.simulateDay();
         drawMap.draw(simulation, mapElementsPane, GRID_SIZE);
-        menu.onUpdate();
+        simulation.world.updateAndRemoveOldTraces();
+        menu.update();
     }
 
     public static void main(String[] args) {
