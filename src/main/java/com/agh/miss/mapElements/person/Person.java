@@ -14,7 +14,12 @@ public class Person extends AbstractMapElement {
         HEALTHY,
         INFECTED,
         CURED,
-        DEAD
+        DEAD;
+
+        @Override
+        public String toString() {
+            return this.name().charAt(0) + this.name().substring(1).toLowerCase();
+        }
     }
 
     private MapDirection direction;
