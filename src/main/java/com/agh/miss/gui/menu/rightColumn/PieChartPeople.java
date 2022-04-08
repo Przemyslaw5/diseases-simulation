@@ -41,12 +41,10 @@ public class PieChartPeople extends VBox {
     }
 
     public void update(){
-        if(simulation.dayOfSimulation % Simulation.NUMBER_OF_DAYS_AFTER_CHARTS_UPDATE == 0){
-            for(PieChart.Data data : pieChartData){
-                String healthStateName = data.getName().split(" ")[0];
-                data.setName(healthStateName + " (" + Math.round((float) getNumberAppropriatePeople(healthStateName) * 100 / startPeopleNumber) + "%) ");
-                data.setPieValue(getNumberAppropriatePeople(healthStateName));
-            }
+        for(PieChart.Data data : pieChartData){
+            String healthStateName = data.getName().split(" ")[0];
+            data.setName(healthStateName + " (" + Math.round((float) getNumberAppropriatePeople(healthStateName) * 100 / startPeopleNumber) + "%) ");
+            data.setPieValue(getNumberAppropriatePeople(healthStateName));
         }
     }
 
