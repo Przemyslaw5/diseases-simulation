@@ -14,6 +14,7 @@ public class World implements IWorldMap {
     private final double infectionChance;
     private final double recoveryChance;
     private final int recoveryTime;
+    private final int curedPeopleResistanceTime;
     private final double deathChance;
     private final Point leftBottomCorner;
     private final Point rightTopCorner;
@@ -30,6 +31,7 @@ public class World implements IWorldMap {
             double infectionChance,
             double recoveryChance,
             int recoveryTime,
+            int curedPeopleResistanceTime,
             double deathChance
     ) {
         this.MAP_WIDTH = width;
@@ -38,6 +40,7 @@ public class World implements IWorldMap {
         this.infectionChance = infectionChance;
         this.recoveryChance = recoveryChance;
         this.recoveryTime = recoveryTime;
+        this.curedPeopleResistanceTime  =curedPeopleResistanceTime;
         this.deathChance = deathChance;
         this.leftBottomCorner = new Point(0, 0);
         this.rightTopCorner = new Point(width, height);
@@ -148,8 +151,8 @@ public class World implements IWorldMap {
         traces.forEach((position, trace) -> {
             if (people.get(position) != null) {
                 people.get(position).stream()
-                        .filter(Person::isHealthy)
-                        .filter(person -> random.nextDouble() * 100 <= infectionChance * trace.getTracePower() / 100)
+                        .filter(person -> person.isHealthy() || person.isCured())
+                        .filter(person -> random.nextDouble() * 100 <= infectionChance * (trace.getTracePower() / 100) * ((person.isCured()) ? (float)(person.getResistanceTime() / curedPeopleResistanceTime) : 1))
                         .forEach(Person::infect);
             }
         });
@@ -159,7 +162,7 @@ public class World implements IWorldMap {
         people.forEach((position, listOfPeople) -> listOfPeople.stream()
                 .filter(Person::isInfected)
                 .forEach(person -> {
-                    if (person.infectionTime() >= recoveryTime && random.nextDouble() * 100 <= recoveryChance)
+                    if (person.getInfectionTime() >= recoveryTime && random.nextDouble() * 100 <= recoveryChance)
                         person.cure();
                     else
                         person.incInfectionTime();
@@ -167,10 +170,18 @@ public class World implements IWorldMap {
         );
     }
 
+    public void reduceCuredPeopleResistance() {
+        people.forEach((position, listOfPeople) -> listOfPeople.stream()
+                .filter(Person::isCured)
+                .filter(person -> person.getResistanceTime() < curedPeopleResistanceTime)
+                .forEach(Person::incResistanceTime)
+        );
+    }
+
     public void killPeople() {
         people.forEach((position, listOfPeople) -> listOfPeople.stream()
                 .filter(Person::isInfected)
-                .filter(person -> (person.infectionTime() >= recoveryTime && random.nextDouble() * 100 <= deathChance))
+                .filter(person -> (person.getInfectionTime() >= recoveryTime && random.nextDouble() * 100 <= deathChance))
                 .forEach(Person::die)
         );
     }

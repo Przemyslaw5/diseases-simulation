@@ -62,6 +62,15 @@ public class Parameters extends VBox {
         HBox hBoxRecoveryTime = new HBox();
         hBoxRecoveryTime.getChildren().addAll(recoveryTimeLabel, recoveryTimeTextField);
 
+        Label curedPeopleResistanceTimeLabel = new Label("Cured people resistance time: ");
+        curedPeopleResistanceTimeLabel.setPrefWidth(210);
+        TextField curedPeopleResistanceTimeTextField =
+                new TextField(String.valueOf(Simulation.CURED_PEOPLE_RESISTANCE_TIME));
+        curedPeopleResistanceTimeTextField.setPrefColumnCount(5);
+        HBox hBoxCuredPeopleResistanceTime = new HBox();
+        hBoxCuredPeopleResistanceTime.getChildren()
+                .addAll(curedPeopleResistanceTimeLabel, curedPeopleResistanceTimeTextField);
+
         Label deathChanceLabel = new Label("Death chance: ");
         deathChanceLabel.setPrefWidth(210);
         TextField deathChanceTextField = new TextField(String.valueOf(Simulation.DEATH_CHANCE));
@@ -86,6 +95,7 @@ public class Parameters extends VBox {
             double infectionChance = Double.parseDouble(infectionChanceTextField.getText());
             double recoveryChance = Double.parseDouble(recoveryChanceTextField.getText());
             int recoveryTime = Integer.parseInt(recoveryTimeTextField.getText());
+            int curedPeopleResistanceTime = Integer.parseInt(curedPeopleResistanceTimeTextField.getText());
             double deathChance = Double.parseDouble(deathChanceTextField.getText());
             Trace.setMaxTraceTime(Integer.parseInt(traceTimeTextField.getText()));
 
@@ -95,6 +105,7 @@ public class Parameters extends VBox {
                     infectionChance,
                     recoveryChance,
                     recoveryTime,
+                    curedPeopleResistanceTime,
                     deathChance
             );
         });
@@ -110,6 +121,7 @@ public class Parameters extends VBox {
             infectionChanceTextField.setText(String.valueOf(Simulation.INFECTION_CHANCE));
             recoveryChanceTextField.setText(String.valueOf(Simulation.RECOVERY_CHANCE));
             recoveryTimeTextField.setText(String.valueOf(Simulation.RECOVERY_TIME));
+            curedPeopleResistanceTimeTextField.setText(String.valueOf(Simulation.CURED_PEOPLE_RESISTANCE_TIME));
             deathChanceTextField.setText(String.valueOf(Simulation.DEATH_CHANCE));
             traceTimeTextField.setText(String.valueOf(Simulation.TRACE_TIME));
         });
@@ -134,6 +146,7 @@ public class Parameters extends VBox {
                 hBoxInfectionChance,
                 hBoxRecoveryChance,
                 hBoxRecoveryTime,
+                hBoxCuredPeopleResistanceTime,
                 hBoxDeathChance,
                 hBoxTraceTime,
                 submitButton,

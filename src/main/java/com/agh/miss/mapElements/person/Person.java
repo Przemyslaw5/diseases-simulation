@@ -25,6 +25,7 @@ public class Person extends AbstractMapElement {
     private MapDirection direction;
     private final World world;
     private int infectionTime;
+    private int resistanceTime;
     private HealthState healthState;
 
 
@@ -35,6 +36,7 @@ public class Person extends AbstractMapElement {
         direction = MapDirection.getRandomDirection();
         this.world = world;
         this.infectionTime = 0;
+        this.resistanceTime = 0;
         this.healthState = healthState;
     }
 
@@ -77,12 +79,12 @@ public class Person extends AbstractMapElement {
         return this.healthState;
     }
 
-    public int infectionTime() {
+    public int getInfectionTime() {
         return infectionTime;
     }
 
-    public void infect() {
-        this.healthState = HealthState.INFECTED;
+    public int getResistanceTime() {
+        return resistanceTime;
     }
 
     public boolean canInfect() {
@@ -91,6 +93,15 @@ public class Person extends AbstractMapElement {
 
     public void incInfectionTime() {
         infectionTime++;
+    }
+
+    public void incResistanceTime() {
+        resistanceTime++;
+    }
+
+    public void infect() {
+        this.healthState = HealthState.INFECTED;
+        resistanceTime = 0;
     }
 
     public void cure() {
