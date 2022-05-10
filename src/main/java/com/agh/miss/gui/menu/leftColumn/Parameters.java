@@ -65,7 +65,7 @@ public class Parameters extends VBox {
         Label curedPeopleResistanceTimeLabel = new Label("Cured people resistance time: ");
         curedPeopleResistanceTimeLabel.setPrefWidth(210);
         TextField curedPeopleResistanceTimeTextField =
-                new TextField(String.valueOf(Simulation.CURED_PEOPLE_RESISTANCE_TIME));
+                new TextField(String.valueOf(Simulation.RESISTANCE_TIME));
         curedPeopleResistanceTimeTextField.setPrefColumnCount(5);
         HBox hBoxCuredPeopleResistanceTime = new HBox();
         hBoxCuredPeopleResistanceTime.getChildren()
@@ -121,7 +121,7 @@ public class Parameters extends VBox {
             infectionChanceTextField.setText(String.valueOf(Simulation.INFECTION_CHANCE));
             recoveryChanceTextField.setText(String.valueOf(Simulation.RECOVERY_CHANCE));
             recoveryTimeTextField.setText(String.valueOf(Simulation.RECOVERY_TIME));
-            curedPeopleResistanceTimeTextField.setText(String.valueOf(Simulation.CURED_PEOPLE_RESISTANCE_TIME));
+            curedPeopleResistanceTimeTextField.setText(String.valueOf(Simulation.RESISTANCE_TIME));
             deathChanceTextField.setText(String.valueOf(Simulation.DEATH_CHANCE));
             traceTimeTextField.setText(String.valueOf(Simulation.TRACE_TIME));
         });

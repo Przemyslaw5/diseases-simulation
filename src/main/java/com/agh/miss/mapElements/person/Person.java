@@ -1,7 +1,9 @@
 package com.agh.miss.mapElements.person;
 
+import com.agh.miss.Simulation;
 import com.agh.miss.map.World;
 import com.agh.miss.mapElements.AbstractMapElement;
+import com.agh.miss.mapElements.trace.Trace;
 import com.agh.miss.parametersObject.MapDirection;
 import com.agh.miss.parametersObject.Point;
 
@@ -97,6 +99,21 @@ public class Person extends AbstractMapElement {
 
     public void incResistanceTime() {
         resistanceTime++;
+    }
+
+    public boolean canBeInfected() {
+        if (isHealthy()) {
+            return true;
+        } else return isCured();
+    }
+
+    public boolean willBeInfected(Trace trace) {
+        if (canBeInfected()) {
+            return random.nextDouble() * 100 <=
+                    Simulation.INFECTION_CHANCE
+                            * (trace.getTracePower() / 100)
+                            * ((isCured()) ? (float) (getResistanceTime() / resistanceTime) : 1);
+        } else return false;
     }
 
     public void infect() {

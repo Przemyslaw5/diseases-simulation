@@ -14,7 +14,7 @@ public class World implements IWorldMap {
     private final double infectionChance;
     private final double recoveryChance;
     private final int recoveryTime;
-    private final int curedPeopleResistanceTime;
+    private final int resistanceTime;
     private final double deathChance;
     private final Point leftBottomCorner;
     private final Point rightTopCorner;
@@ -31,7 +31,7 @@ public class World implements IWorldMap {
             double infectionChance,
             double recoveryChance,
             int recoveryTime,
-            int curedPeopleResistanceTime,
+            int resistanceTime,
             double deathChance
     ) {
         this.MAP_WIDTH = width;
@@ -40,7 +40,7 @@ public class World implements IWorldMap {
         this.infectionChance = infectionChance;
         this.recoveryChance = recoveryChance;
         this.recoveryTime = recoveryTime;
-        this.curedPeopleResistanceTime  =curedPeopleResistanceTime;
+        this.resistanceTime = resistanceTime;
         this.deathChance = deathChance;
         this.leftBottomCorner = new Point(0, 0);
         this.rightTopCorner = new Point(width, height);
@@ -151,8 +151,7 @@ public class World implements IWorldMap {
         traces.forEach((position, trace) -> {
             if (people.get(position) != null) {
                 people.get(position).stream()
-                        .filter(person -> person.isHealthy() || person.isCured())
-                        .filter(person -> random.nextDouble() * 100 <= infectionChance * (trace.getTracePower() / 100) * ((person.isCured()) ? (float)(person.getResistanceTime() / curedPeopleResistanceTime) : 1))
+                        .filter(person -> person.willBeInfected(trace))
                         .forEach(Person::infect);
             }
         });
@@ -173,7 +172,7 @@ public class World implements IWorldMap {
     public void reduceCuredPeopleResistance() {
         people.forEach((position, listOfPeople) -> listOfPeople.stream()
                 .filter(Person::isCured)
-                .filter(person -> person.getResistanceTime() < curedPeopleResistanceTime)
+                .filter(person -> person.getResistanceTime() < resistanceTime)
                 .forEach(Person::incResistanceTime)
         );
     }

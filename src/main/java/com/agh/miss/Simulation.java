@@ -13,7 +13,7 @@ public class Simulation {
     public static final double INFECTION_CHANCE = 30.0;
     public static final double RECOVERY_CHANCE = 60.0;
     public static final int RECOVERY_TIME = 210;
-    public static final int CURED_PEOPLE_RESISTANCE_TIME = 210;
+    public static final int RESISTANCE_TIME = 210;
     public static final double DEATH_CHANCE = 10.0;
     public static final int TRACE_TIME = 5;
 
@@ -31,7 +31,7 @@ public class Simulation {
                 INFECTION_CHANCE,
                 RECOVERY_CHANCE,
                 RECOVERY_TIME,
-                CURED_PEOPLE_RESISTANCE_TIME,
+                RESISTANCE_TIME,
                 DEATH_CHANCE
         );
     }
