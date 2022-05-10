@@ -18,6 +18,4 @@
 
 ## milestone-4
 - [x] add logic for smaller infection chance for cured people
-- [ ] add more charts for visualization of the simulation process
-- [ ] add basic reproduction number (r0) display
-- [ ] add vaccinated people logic
+- [x] add more charts for visualization of the simulation process
