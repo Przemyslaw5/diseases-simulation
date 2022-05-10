@@ -17,7 +17,5 @@
 - [x] add chart showing current people health state
 
 ## milestone-4
-- [ ] add logic for smaller infection chance for cured people
-- [ ] add more charts for visualization of the simulation process
-- [ ] add basic reproduction number (r0) display
-- [ ] add vaccinated people logic
+- [x] add logic for smaller infection chance for cured people
+- [x] add more charts for visualization of the simulation process
