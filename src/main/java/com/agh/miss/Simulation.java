@@ -13,6 +13,7 @@ public class Simulation {
     public static final double INFECTION_CHANCE = 30.0;
     public static final double RECOVERY_CHANCE = 60.0;
     public static final int RECOVERY_TIME = 210;
+    public static final int RESISTANCE_TIME = 210;
     public static final double DEATH_CHANCE = 10.0;
     public static final int TRACE_TIME = 5;
 
@@ -30,6 +31,7 @@ public class Simulation {
                 INFECTION_CHANCE,
                 RECOVERY_CHANCE,
                 RECOVERY_TIME,
+                RESISTANCE_TIME,
                 DEATH_CHANCE
         );
     }
@@ -39,6 +41,7 @@ public class Simulation {
                                                   double infectionChance,
                                                   double recoveryChance,
                                                   int recoveryTime,
+                                                  int curedPeopleResistanceTime,
                                                   double deathChance
     ) {
         return new Simulation(
@@ -49,6 +52,7 @@ public class Simulation {
                 infectionChance,
                 recoveryChance,
                 recoveryTime,
+                curedPeopleResistanceTime,
                 deathChance
         );
     }
@@ -61,9 +65,18 @@ public class Simulation {
             double infectionChance,
             double recoveryChance,
             int recoveryTime,
+            int curedPeopleResistanceTime,
             double deathChance
     ) {
-        world = new World(width, height, peopleNumber, infectionChance, recoveryChance, recoveryTime, deathChance);
+        world = new World(width,
+                height,
+                peopleNumber,
+                infectionChance,
+                recoveryChance,
+                recoveryTime,
+                curedPeopleResistanceTime,
+                deathChance
+        );
         world.putStartPeople(percentageOfInfectedPeople);
     }
 
@@ -72,6 +85,7 @@ public class Simulation {
         world.run();
         world.infectPeople();
         world.recoverPeople();
+        world.reduceCuredPeopleResistance();
         world.killPeople();
         world.removeDeadPeople();
     }

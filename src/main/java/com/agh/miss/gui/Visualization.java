@@ -84,6 +84,7 @@ public class Visualization extends Application {
                                      double infectionChance,
                                      double recoveryChance,
                                      int recoveryTime,
+                                     int curedPeopleResistanceTime,
                                      double deathChance
     ) {
         this.simulation = Simulation.startWithGivenParams(
@@ -92,6 +93,7 @@ public class Visualization extends Application {
                 infectionChance,
                 recoveryChance,
                 recoveryTime,
+                curedPeopleResistanceTime,
                 deathChance
         );
         menu.getParameters().resetPausePlayButton();

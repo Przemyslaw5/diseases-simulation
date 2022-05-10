@@ -1,7 +1,9 @@
 package com.agh.miss.mapElements.person;
 
+import com.agh.miss.Simulation;
 import com.agh.miss.map.World;
 import com.agh.miss.mapElements.AbstractMapElement;
+import com.agh.miss.mapElements.trace.Trace;
 import com.agh.miss.parametersObject.MapDirection;
 import com.agh.miss.parametersObject.Point;
 
@@ -25,6 +27,7 @@ public class Person extends AbstractMapElement {
     private MapDirection direction;
     private final World world;
     private int infectionTime;
+    private int resistanceTime;
     private HealthState healthState;
 
 
@@ -35,6 +38,7 @@ public class Person extends AbstractMapElement {
         direction = MapDirection.getRandomDirection();
         this.world = world;
         this.infectionTime = 0;
+        this.resistanceTime = 0;
         this.healthState = healthState;
     }
 
@@ -77,12 +81,12 @@ public class Person extends AbstractMapElement {
         return this.healthState;
     }
 
-    public int infectionTime() {
+    public int getInfectionTime() {
         return infectionTime;
     }
 
-    public void infect() {
-        this.healthState = HealthState.INFECTED;
+    public int getResistanceTime() {
+        return resistanceTime;
     }
 
     public boolean canInfect() {
@@ -91,6 +95,30 @@ public class Person extends AbstractMapElement {
 
     public void incInfectionTime() {
         infectionTime++;
+    }
+
+    public void incResistanceTime() {
+        resistanceTime++;
+    }
+
+    public boolean canBeInfected() {
+        if (isHealthy()) {
+            return true;
+        } else return isCured();
+    }
+
+    public boolean willBeInfected(Trace trace) {
+        if (canBeInfected()) {
+            return random.nextDouble() * 100 <=
+                    Simulation.INFECTION_CHANCE
+                            * (trace.getTracePower() / 100)
+                            * ((isCured()) ? (float) (getResistanceTime() / resistanceTime) : 1);
+        } else return false;
+    }
+
+    public void infect() {
+        this.healthState = HealthState.INFECTED;
+        resistanceTime = 0;
     }
 
     public void cure() {
