@@ -19,3 +19,11 @@
 ## milestone-4
 - [x] add logic for smaller infection chance for cured people
 - [x] add more charts for visualization of the simulation process
+
+## milestone-5
+- [x] add basic reproduction number (r0) display
+- [ ] implement people tracing
+- [ ] add disease history to person
+- [ ] implement logs for tracking person
+- [ ] add vaccinated people logic
+- [ ] add more charts for visualization of the simulation process
