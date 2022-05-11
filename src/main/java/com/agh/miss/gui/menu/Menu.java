@@ -7,6 +7,8 @@ import com.agh.miss.gui.menu.leftColumn.Parameters;
 import com.agh.miss.gui.menu.rightColumn.LineChartPeople;
 import com.agh.miss.gui.menu.rightColumn.PieChartPeople;
 import com.agh.miss.gui.menu.leftColumn.Statistics;
+import com.agh.miss.gui.menu.rightColumn.SelectedPerson;
+import com.agh.miss.mapElements.person.Person;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.HBox;
@@ -14,12 +16,18 @@ import javafx.scene.layout.VBox;
 
 public class Menu extends HBox {
 
-    private final Simulation simulation;
+    private Simulation simulation;
 
     private final Statistics stats;
     private final Parameters parameters;
-    private final PieChartPeople pieChartPeople;
-    private final LineChartPeople lineChartPeople;
+    private PieChartPeople pieChartPeople;
+    private PieChart pieChart;
+    private LineChartPeople lineChartPeople;
+    private LineChart<Number, Number> lineChart;
+
+    private final SelectedPerson selectedPersonParameters;
+
+    private Person selectedPerson = null;
 
     public Menu(Simulation simulation, Visualization visualization){
         this.simulation = simulation;
@@ -29,17 +37,26 @@ public class Menu extends HBox {
         Legend legend = new Legend();
         this.pieChartPeople = new PieChartPeople(simulation);
         this.lineChartPeople = new LineChartPeople(simulation);
+        this.selectedPersonParameters = new SelectedPerson();
 
-        PieChart pieChart = pieChartPeople.getPieChart();
-        LineChart<Number, Number> lineChart = lineChartPeople.getLineChart();
+        pieChart = pieChartPeople.getPieChart();
+        lineChart = lineChartPeople.getLineChart();
 
         VBox leftColumn = new VBox();
         leftColumn.getChildren().addAll(stats, parameters, legend);
 
         VBox rightColumn = new VBox();
-        rightColumn.getChildren().addAll(pieChart, lineChart);
+        rightColumn.getChildren().addAll(pieChart, lineChart, selectedPersonParameters);
 
         getChildren().addAll(leftColumn, rightColumn);
+    }
+
+    public void reset(Simulation simulation) {
+        this.simulation = simulation;
+        parameters.resetPausePlayButton();
+        selectedPersonParameters.reset();
+        pieChartPeople.reset(simulation);
+        lineChartPeople.reset(simulation);
     }
 
     public void update(){
@@ -50,6 +67,8 @@ public class Menu extends HBox {
             pieChartPeople.update();
             lineChartPeople.update();
         }
+
+        if(selectedPerson != null) selectedPersonParameters.update(selectedPerson);
     }
 
     public boolean isApplicationRun(){
@@ -60,7 +79,8 @@ public class Menu extends HBox {
         return parameters;
     }
 
-    public PieChartPeople getPieChartPeople() {
-        return pieChartPeople;
+    public void setSelectedPerson(Person selectedPerson) {
+        this.selectedPerson = selectedPerson;
     }
+
 }

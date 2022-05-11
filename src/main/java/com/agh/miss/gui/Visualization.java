@@ -26,6 +26,7 @@ public class Visualization extends Application {
     private final List<Stage> stages = new LinkedList<>();
     public Simulation simulation;
     private Menu menu;
+    private DrawMap drawMap;
 
     @Override
     public void start(Stage stage) {
@@ -33,7 +34,7 @@ public class Visualization extends Application {
         stages.add(stage);
         stage.setTitle(TITLE);
         simulation = Simulation.startWithDefaultParams();
-        DrawMap drawMap = new DrawMap();
+        this.drawMap = new DrawMap();
 
         //Set size of one element on map, width and height of window
         GRID_SIZE = Configuration.setGridSize(AVAILABLE_WIDTH - WIDTH_STATISTICS, AVAILABLE_HEIGHT, simulation.world.MAP_WIDTH, simulation.world.MAP_HEIGHT);
@@ -41,10 +42,10 @@ public class Visualization extends Application {
         HEIGHT = Math.max(HEIGHT_STATISTICS, GRID_SIZE * (simulation.world.MAP_HEIGHT + 2));
 
         //Start simulation
-        evolutionAnimation(stage, drawMap);
+        evolutionAnimation(stage);
     }
 
-    public void evolutionAnimation(Stage stage, DrawMap drawMap) {
+    public void evolutionAnimation(Stage stage) {
 
         HBox hBox = new HBox();
 
@@ -65,7 +66,7 @@ public class Visualization extends Application {
             public void handle(long now) {
                 if (menu.isApplicationRun() && (now - lastUpdate >= TIME_STEP_ANIMATION_MAP)) {
                     lastUpdate = now;
-                    simulationStep(simulation, mapElementsPane, menu, drawMap);
+                    simulationStep(simulation, mapElementsPane, menu);
                 }
             }
         };
@@ -96,14 +97,15 @@ public class Visualization extends Application {
                 curedPeopleResistanceTime,
                 deathChance
         );
-        menu.getParameters().resetPausePlayButton();
-        menu.getPieChartPeople().restartPieChart(simulation, peopleNumber);
+        drawMap.setSelectedShape(null);
+        drawMap.setSelectedPerson(null);
+        menu.reset(simulation);
     }
 
-    private void simulationStep(Simulation simulation, Pane mapElementsPane, Menu menu, DrawMap drawMap) {
+    private void simulationStep(Simulation simulation, Pane mapElementsPane, Menu menu) {
         mapElementsPane.getChildren().clear();
         simulation.simulateDay();
-        drawMap.draw(simulation, mapElementsPane, GRID_SIZE);
+        drawMap.draw(simulation, mapElementsPane, GRID_SIZE, menu);
         simulation.world.updateAndRemoveOldTraces();
         menu.update();
     }

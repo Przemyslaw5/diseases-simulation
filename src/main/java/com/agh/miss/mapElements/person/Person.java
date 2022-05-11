@@ -29,7 +29,8 @@ public class Person extends AbstractMapElement {
     private int infectionTime;
     private int resistanceTime;
     private HealthState healthState;
-
+    private int numberOfInfections = 0;
+    private int deathDay = -1;
 
     private static final Random random = new Random();
 
@@ -40,6 +41,9 @@ public class Person extends AbstractMapElement {
         this.infectionTime = 0;
         this.resistanceTime = 0;
         this.healthState = healthState;
+        if (healthState == HealthState.INFECTED) {
+            numberOfInfections++;
+        }
     }
 
     public void changeDirection() {
@@ -81,6 +85,10 @@ public class Person extends AbstractMapElement {
         return this.healthState;
     }
 
+    public int getDeathDay() {
+        return deathDay;
+    }
+
     public int getInfectionTime() {
         return infectionTime;
     }
@@ -107,18 +115,22 @@ public class Person extends AbstractMapElement {
         } else return isCured();
     }
 
+    public double getResistanceChance() {
+        return Simulation.INFECTION_CHANCE * ((isCured()) ? (float) (getResistanceTime() / resistanceTime) : 1);
+    }
+
+    public int getNumberOfInfections() {
+        return numberOfInfections;
+    }
+
     public boolean willBeInfected(Trace trace) {
-        if (canBeInfected()) {
-            return random.nextDouble() * 100 <=
-                    Simulation.INFECTION_CHANCE
-                            * (trace.getTracePower() / 100)
-                            * ((isCured()) ? (float) (getResistanceTime() / resistanceTime) : 1);
-        } else return false;
+        return canBeInfected() && random.nextDouble() * 100 <= getResistanceChance() * (trace.getTracePower() / 100);
     }
 
     public void infect() {
         this.healthState = HealthState.INFECTED;
         resistanceTime = 0;
+        numberOfInfections++;
     }
 
     public void cure() {
@@ -126,8 +138,9 @@ public class Person extends AbstractMapElement {
         infectionTime = 0;
     }
 
-    public void die() {
+    public void die(int deathDay) {
         this.healthState = HealthState.DEAD;
+        this.deathDay = deathDay;
         infectionTime = 0;
     }
 

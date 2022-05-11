@@ -86,7 +86,7 @@ public class Simulation {
         world.infectPeople();
         world.recoverPeople();
         world.reduceCuredPeopleResistance();
-        world.killPeople();
+        world.killPeople(dayOfSimulation);
         world.removeDeadPeople();
     }
 

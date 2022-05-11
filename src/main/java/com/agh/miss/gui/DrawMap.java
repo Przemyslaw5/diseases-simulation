@@ -1,6 +1,7 @@
 package com.agh.miss.gui;
 
 import com.agh.miss.Simulation;
+import com.agh.miss.gui.menu.Menu;
 import com.agh.miss.mapElements.person.Person;
 import com.agh.miss.mapElements.trace.Trace;
 import com.agh.miss.parametersObject.Point;
@@ -12,7 +13,10 @@ import javafx.scene.shape.Shape;
 
 public class DrawMap {
 
-    public void draw(Simulation simulation, Pane pane, int gridSize){
+    private Shape selectedShape = null;
+    private Person selectedPerson = null;
+
+    public void draw(Simulation simulation, Pane pane, int gridSize, Menu menu){
 
         for(int i = 0; i <= simulation.world.MAP_WIDTH + 1; i++){
             for(int j = 0; j <= simulation.world.MAP_HEIGHT + 1; j++){
@@ -39,6 +43,16 @@ public class DrawMap {
                         shape = new Circle(1.5 * gridSize + gridSize * i, 1.5 * gridSize + gridSize * j, gridSize * 0.5);
                         shape.setFill(Configuration.setColorPerson((Person) simulation.world.objectAt(objectPoint), simulation.world));
 
+                        //Set selected person
+                        shape.setOnMouseClicked(event -> {
+                            if(selectedShape != null) selectedShape.setFill(Configuration.setColorPerson(selectedPerson, simulation.world));
+                            shape.setFill(Configuration.setColorSelectedPerson());
+                            menu.setSelectedPerson((Person)simulation.world.objectAt(objectPoint));
+                            menu.update();
+                            selectedShape = shape;
+                            selectedPerson = (Person)simulation.world.objectAt(objectPoint);
+                        });
+
                         pane.getChildren().add(shape);
                     }
 
@@ -54,7 +68,23 @@ public class DrawMap {
                         pane.getChildren().add(shape);
                     }
                 }
+
+                //Change the color of field where is selected person and is still live
+                if(selectedPerson != null && selectedPerson.getDeathDay() == -1){
+                    Shape selectedPersonShape = new Circle(1.5 * gridSize + gridSize * selectedPerson.getPosition().x, 1.5 * gridSize + gridSize * selectedPerson.getPosition().y, gridSize * 0.5);
+                    selectedPersonShape.setFill(Configuration.setColorSelectedPerson());
+
+                    pane.getChildren().add(selectedPersonShape);
+                }
             }
         }
+    }
+
+    public void setSelectedShape(Shape selectedShape) {
+        this.selectedShape = selectedShape;
+    }
+
+    public void setSelectedPerson(Person selectedPerson) {
+        this.selectedPerson = selectedPerson;
     }
 }

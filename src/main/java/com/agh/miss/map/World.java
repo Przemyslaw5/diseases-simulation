@@ -177,11 +177,11 @@ public class World implements IWorldMap {
         );
     }
 
-    public void killPeople() {
+    public void killPeople(int deathDay) {
         people.forEach((position, listOfPeople) -> listOfPeople.stream()
                 .filter(Person::isInfected)
                 .filter(person -> (person.getInfectionTime() >= recoveryTime && random.nextDouble() * 100 <= deathChance))
-                .forEach(Person::die)
+                .forEach(person -> person.die(deathDay))
         );
     }
 
