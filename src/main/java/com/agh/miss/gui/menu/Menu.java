@@ -20,10 +20,8 @@ public class Menu extends HBox {
 
     private final Statistics stats;
     private final Parameters parameters;
-    private PieChartPeople pieChartPeople;
-    private PieChart pieChart;
-    private LineChartPeople lineChartPeople;
-    private LineChart<Number, Number> lineChart;
+    private final PieChartPeople pieChartPeople;
+    private final LineChartPeople lineChartPeople;
 
     private final SelectedPerson selectedPersonParameters;
 
@@ -39,8 +37,8 @@ public class Menu extends HBox {
         this.lineChartPeople = new LineChartPeople(simulation);
         this.selectedPersonParameters = new SelectedPerson();
 
-        pieChart = pieChartPeople.getPieChart();
-        lineChart = lineChartPeople.getLineChart();
+        PieChart pieChart = pieChartPeople.getPieChart();
+        LineChart<Number, Number> lineChart = lineChartPeople.getLineChart();
 
         VBox leftColumn = new VBox();
         leftColumn.getChildren().addAll(stats, parameters, legend);
