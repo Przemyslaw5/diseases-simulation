@@ -242,6 +242,10 @@ public class World implements IWorldMap {
         return startPeopleNumber;
     }
 
+    public int getResistanceTime() {
+        return resistanceTime;
+    }
+
     @Override
     public String toString() {
         MapVisualizer map = new MapVisualizer(this);

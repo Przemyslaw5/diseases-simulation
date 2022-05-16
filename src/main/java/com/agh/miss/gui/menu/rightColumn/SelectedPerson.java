@@ -1,5 +1,6 @@
 package com.agh.miss.gui.menu.rightColumn;
 
+import com.agh.miss.Simulation;
 import com.agh.miss.mapElements.person.Person;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -39,7 +40,7 @@ public class SelectedPerson extends VBox {
         this.numberOfInfections.setText("");
     }
 
-    public void update(Person person){
+    public void update(Person person, Simulation simulation){
 
         this.healthState.setText("Health state: " + person.getHealthState());
 
@@ -49,7 +50,7 @@ public class SelectedPerson extends VBox {
         }
 
         else if (person.getHealthState() == Person.HealthState.CURED) {
-            this.detailedInformation.setText("");
+            this.detailedInformation.setText("Resistance time remain: " + (simulation.world.getResistanceTime() - person.getResistanceTime()));
             this.position.setText("Position: " + person.getPosition());
         }
 

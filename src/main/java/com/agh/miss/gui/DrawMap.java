@@ -73,6 +73,7 @@ public class DrawMap {
                 if(selectedPerson != null && selectedPerson.getDeathDay() == -1){
                     Shape selectedPersonShape = new Circle(1.5 * gridSize + gridSize * selectedPerson.getPosition().x, 1.5 * gridSize + gridSize * selectedPerson.getPosition().y, gridSize * 0.5);
                     selectedPersonShape.setFill(Configuration.setColorSelectedPerson());
+                    selectedShape = selectedPersonShape;
 
                     pane.getChildren().add(selectedPersonShape);
                 }

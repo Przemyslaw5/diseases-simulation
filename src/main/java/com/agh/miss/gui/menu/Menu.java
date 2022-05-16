@@ -66,7 +66,7 @@ public class Menu extends HBox {
             lineChartPeople.update();
         }
 
-        if(selectedPerson != null) selectedPersonParameters.update(selectedPerson);
+        if(selectedPerson != null) selectedPersonParameters.update(selectedPerson, simulation);
     }
 
     public boolean isApplicationRun(){
