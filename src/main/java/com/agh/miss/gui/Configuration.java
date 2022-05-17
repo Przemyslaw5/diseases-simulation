@@ -40,4 +40,8 @@ public class Configuration {
             default -> throw new IllegalStateException("Unexpected value: " + trace.getColorNumber());
         };
     }
+
+    public static Color setColorSelectedPerson (){
+        return Color.rgb(75,251,251);
+    }
 }
