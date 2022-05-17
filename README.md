@@ -23,7 +23,7 @@
 ## milestone-5
 - [x] add basic reproduction number (r0) display
 - [x] implement people tracking
-- [ ] add disease history of person
-- [ ] implement logs for tracking person
+- [x] add disease history of person
+- [x] implement logs for tracking person
 - [ ] add vaccinated people logic
 - [x] add more charts for visualization of the simulation process

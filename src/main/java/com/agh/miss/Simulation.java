@@ -84,8 +84,8 @@ public class Simulation {
     public void simulateDay() {
         dayOfSimulation++;
         world.run();
-        world.infectPeople();
-        world.recoverPeople();
+        world.infectPeople(dayOfSimulation);
+        world.recoverPeople(dayOfSimulation);
         world.reduceCuredPeopleResistance();
         world.killPeople(dayOfSimulation);
         world.removeDeadPeople();
