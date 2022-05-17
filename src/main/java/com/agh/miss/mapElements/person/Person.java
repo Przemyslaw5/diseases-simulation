@@ -7,6 +7,8 @@ import com.agh.miss.mapElements.trace.Trace;
 import com.agh.miss.parametersObject.MapDirection;
 import com.agh.miss.parametersObject.Point;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -29,7 +31,10 @@ public class Person extends AbstractMapElement {
     private int infectionTime;
     private int resistanceTime;
     private HealthState healthState;
+    private int numberOfInfections = 0;
+    private int deathDay = -1;
 
+    private final List<String> informationHistory;
 
     private static final Random random = new Random();
 
@@ -40,6 +45,11 @@ public class Person extends AbstractMapElement {
         this.infectionTime = 0;
         this.resistanceTime = 0;
         this.healthState = healthState;
+        if (healthState == HealthState.INFECTED) {
+            numberOfInfections++;
+        }
+        informationHistory = new ArrayList<>();
+        informationHistory.add("Person start simulation in state: " + healthState + ".");
     }
 
     public void changeDirection() {
@@ -81,6 +91,10 @@ public class Person extends AbstractMapElement {
         return this.healthState;
     }
 
+    public int getDeathDay() {
+        return deathDay;
+    }
+
     public int getInfectionTime() {
         return infectionTime;
     }
@@ -107,28 +121,40 @@ public class Person extends AbstractMapElement {
         } else return isCured();
     }
 
-    public boolean willBeInfected(Trace trace) {
-        if (canBeInfected()) {
-            return random.nextDouble() * 100 <=
-                    Simulation.INFECTION_CHANCE
-                            * (trace.getTracePower() / 100)
-                            * ((isCured()) ? (float) (getResistanceTime() / resistanceTime) : 1);
-        } else return false;
+    public double getResistanceChance() {
+        return Simulation.INFECTION_CHANCE * ((isCured()) ? (float) (getResistanceTime() / resistanceTime) : 1);
     }
 
-    public void infect() {
+    public int getNumberOfInfections() {
+        return numberOfInfections;
+    }
+
+    public List<String> getInformationHistory() {
+        return informationHistory;
+    }
+
+    public boolean willBeInfected(Trace trace) {
+        return canBeInfected() && random.nextDouble() * 100 <= getResistanceChance() * (trace.getTracePower() / 100);
+    }
+
+    public void infect(int dayOfSimulation) {
         this.healthState = HealthState.INFECTED;
         resistanceTime = 0;
+        numberOfInfections++;
+        informationHistory.add("Person was infected on day: " + dayOfSimulation + ".");
     }
 
-    public void cure() {
+    public void cure(int dayOfSimulation) {
         this.healthState = HealthState.CURED;
         infectionTime = 0;
+        informationHistory.add("Recovery occurred on day: " + dayOfSimulation + ".");
     }
 
-    public void die() {
+    public void die(int deathDay) {
         this.healthState = HealthState.DEAD;
+        this.deathDay = deathDay;
         infectionTime = 0;
+        informationHistory.add("Person died of the disease on day: " + deathDay + ".");
     }
 
     @Override

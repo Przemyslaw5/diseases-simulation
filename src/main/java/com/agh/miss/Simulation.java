@@ -21,6 +21,7 @@ public class Simulation {
 
     public World world;
     public int dayOfSimulation = 1;
+    public double r0;
 
     public static Simulation startWithDefaultParams() {
         return new Simulation(
@@ -83,11 +84,12 @@ public class Simulation {
     public void simulateDay() {
         dayOfSimulation++;
         world.run();
-        world.infectPeople();
-        world.recoverPeople();
+        world.infectPeople(dayOfSimulation);
+        world.recoverPeople(dayOfSimulation);
         world.reduceCuredPeopleResistance();
-        world.killPeople();
+        world.killPeople(dayOfSimulation);
         world.removeDeadPeople();
+        r0 = world.calculateR0();
     }
 
 }

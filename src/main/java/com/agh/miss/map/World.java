@@ -24,6 +24,10 @@ public class World implements IWorldMap {
     private final HashMap<Point, LinkedList<Person>> people = new HashMap<>();
     private final HashMap<Point, Trace> traces = new HashMap<>();
 
+    private int initialSusceptible;
+    private int infections = 0;
+    private int recovers = 0;
+
     public World(
             int width,
             int height,
@@ -147,22 +151,22 @@ public class World implements IWorldMap {
         return startPeopleNumber - numberPeopleOnMap();
     }
 
-    public void infectPeople() {
+    public void infectPeople(int dayOfSimulation) {
         traces.forEach((position, trace) -> {
             if (people.get(position) != null) {
                 people.get(position).stream()
                         .filter(person -> person.willBeInfected(trace))
-                        .forEach(Person::infect);
+                        .forEach(p -> p.infect(dayOfSimulation));
             }
         });
     }
 
-    public void recoverPeople() {
+    public void recoverPeople(int dayOfSimulation) {
         people.forEach((position, listOfPeople) -> listOfPeople.stream()
                 .filter(Person::isInfected)
                 .forEach(person -> {
                     if (person.getInfectionTime() >= recoveryTime && random.nextDouble() * 100 <= recoveryChance)
-                        person.cure();
+                        person.cure(dayOfSimulation);
                     else
                         person.incInfectionTime();
                 })
@@ -177,11 +181,11 @@ public class World implements IWorldMap {
         );
     }
 
-    public void killPeople() {
+    public void killPeople(int deathDay) {
         people.forEach((position, listOfPeople) -> listOfPeople.stream()
                 .filter(Person::isInfected)
                 .filter(person -> (person.getInfectionTime() >= recoveryTime && random.nextDouble() * 100 <= deathChance))
-                .forEach(Person::die)
+                .forEach(person -> person.die(deathDay))
         );
     }
 
@@ -212,8 +216,10 @@ public class World implements IWorldMap {
 
             if (i < startPeopleNumber * percentageOfInfectedPeople / 100)
                 healthState = Person.HealthState.INFECTED;
-            else
+            else {
                 healthState = Person.HealthState.HEALTHY;
+                initialSusceptible++;
+            }
 
             person = new Person(new Point(x, y), this, healthState);
             place(person);
@@ -238,8 +244,34 @@ public class World implements IWorldMap {
         });
     }
 
+    public double calculateR0() {
+        double r0 = 0;
+
+        int previousInfections = this.infections;
+        int previousRecovers = this.recovers;
+
+        int susceptible = numberHealthyPeopleOnMap() + numberCuredPeopleOnMap();
+
+        this.infections = numberInfectedPeopleOnMap() - previousInfections;
+        if (this.infections < 0) this.infections = 0;
+
+        this.recovers = numberCuredPeopleOnMap() - previousRecovers;
+        if (this.recovers < 0) this.recovers = 0;
+
+        if (startPeopleNumber - susceptible != 0 && susceptible != 0) {
+            r0 = (Math.log((double) initialSusceptible / susceptible) / (startPeopleNumber - susceptible));
+            r0 = r0 * initialSusceptible;
+        }
+
+        return r0;
+    }
+
     public int getStartPeopleNumber() {
         return startPeopleNumber;
+    }
+
+    public int getResistanceTime() {
+        return resistanceTime;
     }
 
     @Override

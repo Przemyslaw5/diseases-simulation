@@ -1,4 +1,4 @@
-package com.agh.miss.gui.menu.rightColumn;
+package com.agh.miss.gui.menu.middleColumn;
 
 import com.agh.miss.Simulation;
 import com.agh.miss.mapElements.person.Person;
@@ -21,6 +21,7 @@ public class PieChartPeople extends VBox {
         this.startPeopleNumber = simulation.world.getStartPeopleNumber();
 
         pieChartData = FXCollections.observableArrayList();
+
         Arrays.stream(Person.HealthState.values()).forEach(healthState ->
                 pieChartData.add(new PieChart.Data(healthState.toString(), 10)));
 
@@ -28,6 +29,16 @@ public class PieChartPeople extends VBox {
         pieChart.setMaxHeight(200);
         pieChart.setMaxWidth(300);
         pieChart.setTitle("Percentage of people by state");
+    }
+
+    public void reset(Simulation simulation) {
+        this.simulation = simulation;
+        this.startPeopleNumber = simulation.world.getStartPeopleNumber();
+
+        pieChartData.clear();
+
+        Arrays.stream(Person.HealthState.values()).forEach(healthState ->
+                pieChartData.add(new PieChart.Data(healthState.toString(), 10)));
     }
 
     private int getNumberAppropriatePeople(String healthStateName) {
@@ -46,11 +57,6 @@ public class PieChartPeople extends VBox {
             data.setName(healthStateName + " (" + Math.round((float) getNumberAppropriatePeople(healthStateName) * 100 / startPeopleNumber) + "%) ");
             data.setPieValue(getNumberAppropriatePeople(healthStateName));
         }
-    }
-
-    public void restartPieChart(Simulation simulation, int startPeopleNumber) {
-        this.simulation = simulation;
-        this.startPeopleNumber = startPeopleNumber;
     }
 
     public PieChart getPieChart() {

@@ -21,9 +21,8 @@
 - [x] add more charts for visualization of the simulation process
 
 ## milestone-5
-- [ ] add basic reproduction number (r0) display
-- [ ] implement people tracing
-- [ ] add disease history to person
-- [ ] implement logs for tracking person
-- [ ] add vaccinated people logic
-- [ ] add more charts for visualization of the simulation process
+- [x] add basic reproduction number (r0) display
+- [x] implement people tracking
+- [x] add disease history of person
+- [x] implement logs for tracking person
+- [x] add more charts for visualization of the simulation process

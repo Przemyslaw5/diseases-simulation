@@ -1,4 +1,4 @@
-package com.agh.miss.gui.menu.rightColumn;
+package com.agh.miss.gui.menu.middleColumn;
 
 import com.agh.miss.Simulation;
 import javafx.scene.chart.LineChart;
@@ -14,7 +14,7 @@ public class LineChartPeople {
 
     private final LineChart<Number, Number> lineChart;
 
-    private final Simulation simulation;
+    private Simulation simulation;
 
     public LineChartPeople(Simulation simulation){
         this.simulation = simulation;
@@ -36,6 +36,15 @@ public class LineChartPeople {
         lineChart.setMaxHeight(300);
         lineChart.setMaxWidth(300);
         this.lineChart = lineChart;
+    }
+
+    public void reset(Simulation simulation) {
+        this.simulation = simulation;
+
+        healthyPeopleSeries.getData().clear();
+        infectedPeopleSeries.getData().clear();
+        curedPeopleSeries.getData().clear();
+        deadPeopleSeries.getData().clear();
     }
 
     public LineChart<Number, Number> getLineChart() {
