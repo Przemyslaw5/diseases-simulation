@@ -147,22 +147,22 @@ public class World implements IWorldMap {
         return startPeopleNumber - numberPeopleOnMap();
     }
 
-    public void infectPeople() {
+    public void infectPeople(int dayOfSimulation) {
         traces.forEach((position, trace) -> {
             if (people.get(position) != null) {
                 people.get(position).stream()
                         .filter(person -> person.willBeInfected(trace))
-                        .forEach(Person::infect);
+                        .forEach(p -> p.infect(dayOfSimulation));
             }
         });
     }
 
-    public void recoverPeople() {
+    public void recoverPeople(int dayOfSimulation) {
         people.forEach((position, listOfPeople) -> listOfPeople.stream()
                 .filter(Person::isInfected)
                 .forEach(person -> {
                     if (person.getInfectionTime() >= recoveryTime && random.nextDouble() * 100 <= recoveryChance)
-                        person.cure();
+                        person.cure(dayOfSimulation);
                     else
                         person.incInfectionTime();
                 })
