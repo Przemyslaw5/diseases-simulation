@@ -5,6 +5,7 @@ import com.agh.miss.gui.Visualization;
 import com.agh.miss.gui.menu.leftColumn.Legend;
 import com.agh.miss.gui.menu.leftColumn.Parameters;
 import com.agh.miss.gui.menu.rightColumn.LineChartPeople;
+import com.agh.miss.gui.menu.rightColumn.LineChartR0;
 import com.agh.miss.gui.menu.rightColumn.PieChartPeople;
 import com.agh.miss.gui.menu.leftColumn.Statistics;
 import com.agh.miss.gui.menu.rightColumn.SelectedPerson;
@@ -22,6 +23,7 @@ public class Menu extends HBox {
     private final Parameters parameters;
     private final PieChartPeople pieChartPeople;
     private final LineChartPeople lineChartPeople;
+    private final LineChartR0 lineChartR0;
 
     private final SelectedPerson selectedPersonParameters;
 
@@ -35,16 +37,18 @@ public class Menu extends HBox {
         Legend legend = new Legend();
         this.pieChartPeople = new PieChartPeople(simulation);
         this.lineChartPeople = new LineChartPeople(simulation);
+        this.lineChartR0 = new LineChartR0(simulation);
         this.selectedPersonParameters = new SelectedPerson();
 
         PieChart pieChart = pieChartPeople.getPieChart();
         LineChart<Number, Number> lineChart = lineChartPeople.getLineChart();
+        LineChart<Number, Number> lineChart2 = lineChartR0.getLineChart();
 
         VBox leftColumn = new VBox();
         leftColumn.getChildren().addAll(stats, parameters, legend);
 
         VBox rightColumn = new VBox();
-        rightColumn.getChildren().addAll(pieChart, lineChart, selectedPersonParameters);
+        rightColumn.getChildren().addAll(pieChart, lineChart, lineChart2,selectedPersonParameters);
 
         getChildren().addAll(leftColumn, rightColumn);
     }
@@ -55,10 +59,12 @@ public class Menu extends HBox {
         selectedPersonParameters.reset();
         pieChartPeople.reset(simulation);
         lineChartPeople.reset(simulation);
+        lineChartR0.reset(simulation);
     }
 
     public void update(){
         stats.update();
+        lineChartR0.update();
 
         // Charts update every 10 days
         if(simulation.dayOfSimulation % Simulation.NUMBER_OF_DAYS_AFTER_CHARTS_UPDATE == 0){
