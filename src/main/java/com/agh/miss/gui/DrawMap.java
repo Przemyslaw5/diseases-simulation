@@ -15,6 +15,7 @@ public class DrawMap {
 
     private Shape selectedShape = null;
     private Person selectedPerson = null;
+    private Person previousSelectedPerson = null;
 
     public void draw(Simulation simulation, Pane pane, int gridSize, Menu menu){
 
@@ -50,6 +51,7 @@ public class DrawMap {
                             menu.setSelectedPerson((Person)simulation.world.objectAt(objectPoint));
                             menu.update();
                             selectedShape = shape;
+                            previousSelectedPerson = selectedPerson;
                             selectedPerson = (Person)simulation.world.objectAt(objectPoint);
                         });
 
@@ -73,8 +75,20 @@ public class DrawMap {
                 if(selectedPerson != null && selectedPerson.getDeathDay() == -1){
                     Shape selectedPersonShape = new Circle(1.5 * gridSize + gridSize * selectedPerson.getPosition().x, 1.5 * gridSize + gridSize * selectedPerson.getPosition().y, gridSize * 0.5);
                     selectedPersonShape.setFill(Configuration.setColorSelectedPerson());
-                    selectedShape = selectedPersonShape;
 
+                    selectedPersonShape.setOnMouseClicked(event -> {
+                        if(selectedShape != null) selectedShape.setFill(Configuration.setColorPerson(selectedPerson, simulation.world));
+                        selectedPersonShape.setFill(Configuration.setColorSelectedPerson());
+                        menu.setSelectedPerson((Person)simulation.world.objectAt(previousSelectedPerson.getPosition()));
+                        menu.update();
+                        selectedShape = selectedPersonShape;
+                        Person tmpPerson = previousSelectedPerson;
+                        previousSelectedPerson = selectedPerson;
+                        selectedPerson = (Person)simulation.world.objectAt(tmpPerson.getPosition());
+                    });
+
+                    pane.getChildren().remove(selectedShape);
+                    selectedShape = selectedPersonShape;
                     pane.getChildren().add(selectedPersonShape);
                 }
             }
