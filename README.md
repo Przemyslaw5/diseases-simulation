@@ -26,4 +26,4 @@
 - [ ] add disease history of person
 - [ ] implement logs for tracking person
 - [ ] add vaccinated people logic
-- [ ] add more charts for visualization of the simulation process
+- [x] add more charts for visualization of the simulation process
