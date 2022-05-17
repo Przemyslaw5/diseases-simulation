@@ -1,4 +1,4 @@
-package com.agh.miss.gui.menu.rightColumn;
+package com.agh.miss.gui.menu.middleColumn;
 
 import com.agh.miss.Simulation;
 import javafx.scene.chart.LineChart;

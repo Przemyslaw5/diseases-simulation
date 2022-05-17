@@ -4,9 +4,9 @@ import com.agh.miss.Simulation;
 import com.agh.miss.gui.Visualization;
 import com.agh.miss.gui.menu.leftColumn.Legend;
 import com.agh.miss.gui.menu.leftColumn.Parameters;
-import com.agh.miss.gui.menu.rightColumn.LineChartPeople;
-import com.agh.miss.gui.menu.rightColumn.LineChartR0;
-import com.agh.miss.gui.menu.rightColumn.PieChartPeople;
+import com.agh.miss.gui.menu.middleColumn.LineChartPeople;
+import com.agh.miss.gui.menu.middleColumn.LineChartR0;
+import com.agh.miss.gui.menu.middleColumn.PieChartPeople;
 import com.agh.miss.gui.menu.leftColumn.Statistics;
 import com.agh.miss.gui.menu.rightColumn.SelectedPerson;
 import com.agh.miss.mapElements.person.Person;
@@ -47,15 +47,19 @@ public class Menu extends HBox {
         VBox leftColumn = new VBox();
         leftColumn.getChildren().addAll(stats, parameters, legend);
 
-        VBox rightColumn = new VBox();
-        rightColumn.getChildren().addAll(pieChart, lineChart, lineChart2,selectedPersonParameters);
+        VBox middleColumn = new VBox();
+        middleColumn.getChildren().addAll(pieChart, lineChart, lineChart2, selectedPersonParameters);
 
-        getChildren().addAll(leftColumn, rightColumn);
+        VBox rightColumn = new VBox();
+        rightColumn.getChildren().addAll(selectedPersonParameters);
+
+        getChildren().addAll(leftColumn, middleColumn, rightColumn);
     }
 
     public void reset(Simulation simulation) {
         this.simulation = simulation;
         parameters.resetPausePlayButton();
+        selectedPerson = null;
         selectedPersonParameters.reset();
         pieChartPeople.reset(simulation);
         lineChartPeople.reset(simulation);

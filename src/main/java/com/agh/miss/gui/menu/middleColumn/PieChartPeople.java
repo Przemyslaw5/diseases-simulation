@@ -1,4 +1,4 @@
-package com.agh.miss.gui.menu.rightColumn;
+package com.agh.miss.gui.menu.middleColumn;
 
 import com.agh.miss.Simulation;
 import com.agh.miss.mapElements.person.Person;
