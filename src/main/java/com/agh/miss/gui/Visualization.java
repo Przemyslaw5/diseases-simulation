@@ -14,9 +14,9 @@ import java.util.List;
 
 public class Visualization extends Application {
 
-    private static final int AVAILABLE_WIDTH  = 1500;
+    private static final int AVAILABLE_WIDTH  = 1800;
     private static final int AVAILABLE_HEIGHT = 800;
-    private static final int WIDTH_STATISTICS = 650;
+    private static final int WIDTH_STATISTICS = 950;
     private static final int HEIGHT_STATISTICS = 750;
     private static int GRID_SIZE;
     private static int WIDTH;
